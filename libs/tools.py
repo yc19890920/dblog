@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from app.core.models import Prefs
+from libs.formats import dict_compatibility
+from django_redis import get_redis_connection
+from bs4 import BeautifulSoup
 
 def getClientIP(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
         return x_forwarded_for.split(',')[0]
     return request.META.get('REMOTE_ADDR')
-
-from app.core.models import Prefs
-from libs.formats import dict_compatibility
-from django_redis import get_redis_connection
 
 def getSmtpAccout():
     redis = get_redis_connection()
@@ -35,3 +35,8 @@ def getSmtpAccout():
         p.expire(key, 3600)
         p.execute()
     return host, int(port), int(is_ssl), account, password
+
+def clearHtmlTags(html):
+    text = BeautifulSoup(html).get_text()
+    text = text.replace("\r", "").replace("\n", "").replace("  ", "")
+    return text

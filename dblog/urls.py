@@ -5,8 +5,10 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-    url(r'^admin/', include('app.core.urls')),
-    url(r'^admin/set/', include('app.setting.urls')),
+
+    url(r'^core/', include('app.core.urls')),
+    url(r'^core/set/', include('app.setting.urls')),
+    url(r'^core/blog/', include('app.blog.urls')),
     # url(r'^admin/', include(admin.site.urls)),
 ]
 urlpatterns += staticfiles_urlpatterns()

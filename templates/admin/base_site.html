@@ -91,6 +91,39 @@
                 </li>
 
 
+                <li class="" id="nav_blog">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-list"></i>
+                        <span class="menu-text"> 博客 </span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <b class="arrow"></b>
+                    <ul class="submenu">
+
+                        <li class="">
+                            <a href="{% url 'admin_tag' %}"><i class="menu-icon fa fa-caret-right"></i> 标签 </a><b class="arrow"></b>
+                        </li>
+
+                        <li class="">
+                            <a href="{% url 'admin_category' %}"><i class="menu-icon fa fa-caret-right"></i> 分类 </a><b class="arrow"></b>
+                        </li>
+
+                        <li class="">
+                            <a href="{% url 'admin_article' %}"><i class="menu-icon fa fa-caret-right"></i> 文章 </a><b class="arrow"></b>
+                        </li>
+
+                        <li class="">
+                            <a href="{% url 'admin_comment' %}"><i class="menu-icon fa fa-caret-right"></i> 评论 </a><b class="arrow"></b>
+                        </li>
+
+                        <li class="">
+                            <a href="{% url 'admin_suggest' %}"><i class="menu-icon fa fa-caret-right"></i> 留言 </a><b class="arrow"></b>
+                        </li>
+
+                    </ul>
+                </li>
+
+
                 <li class="" id="nav_setting">
                     <a href="#" class="dropdown-toggle">
                         <i class="menu-icon fa fa-list"></i>
@@ -217,8 +250,12 @@
 
         $(function(){
             var path = window.location.pathname;
-            if ( path.indexOf('/admin/set/')==0 ){
+            if ( path.indexOf('/core/set/')==0 ){
                 $('#nav_setting').addClass('open');
+            } else if ( path.indexOf('/core/blog/')==0 ){
+                $('#nav_blog').addClass('open');
+            } else {
+                $('#nav_blog').addClass('open');
             };
         });
 

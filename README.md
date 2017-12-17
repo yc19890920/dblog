@@ -17,3 +17,16 @@ Django 博客系统 、REST等
 使用的css框架 ace Admin， 网址：
 - [Ace Admin](http://ace.jeka.by/index.html)
 
+- [Vue+Django REST Framework生鲜电商项目学习笔记——概览 ](http://lawtech0902.com/2017/11/03/vue-django-1-1/)
+
+## 缓存
+https://python.freelycode.com/contribution/detail/618
+
+https://realpython.com/blog/python/caching-in-django-with-redis/
+
+http://www.najiaoluo.com/it/2680347.html
+
+http://www.cnblogs.com/linxiyue/p/7494540.html
+
+http://www.cnblogs.com/fuhuixiang/p/4174896.html
+

@@ -39,8 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrapform',
     'app.core',
     'app.setting',
+    'app.blog',
 ]
 
 MIDDLEWARE = [
@@ -57,8 +59,8 @@ ROOT_URLCONF = 'dblog.urls'
 # auth 模块
 AUTH_USER_MODEL = 'core.User'
 # 登录url
-LOGIN_URL = '/admin/login'
-LOGIN_REDIRECT_URL = '/admin/home'
+LOGIN_URL = '/core/login'
+LOGIN_REDIRECT_URL = '/core/home'
 
 TEMPLATES = [
     {
