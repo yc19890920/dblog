@@ -116,7 +116,7 @@ class ArticleTags(models.Model):
         db_table = 'blog_article_tags'
 
 class BlogComment(models.Model):
-    username = models.CharField(u'评论者名字', max_length=100)
+    username = models.CharField(u'你的名字', max_length=100)
     content = models.TextField(u'评论内容')
     created = models.DateTimeField(u'创建时间', auto_now_add=True)
     article = models.ForeignKey(Article, verbose_name=u'评论所属文章', on_delete=models.CASCADE)
@@ -131,7 +131,7 @@ class BlogComment(models.Model):
 class Suggest(models.Model):
     """ 意见存储
     """
-    content = models.TextField(u'意见', max_length=200)
+    content = models.TextField(u'建议', max_length=200)
     created = models.DateTimeField(u'创建时间', auto_now_add=True)
 
     class Meta:

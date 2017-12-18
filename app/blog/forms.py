@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 from django import forms
-from app.blog.models import Article, Category
+from app.blog.models import Article, Suggest, BlogComment
 from django.utils.translation import ugettext_lazy as _
 from libs.tools import clearHtmlTags
 
@@ -29,3 +29,14 @@ class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = ["title", "content",  "status", "abstract", "topped", 'category', 'tags']
+
+
+class SuggestForm(forms.ModelForm):
+    class Meta:
+        model = Suggest
+        fields = ["content"]
+
+class BlogCommentForm(forms.ModelForm):
+    class Meta:
+        model = BlogComment
+        fields = ["username", "content"]
