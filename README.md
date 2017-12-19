@@ -27,6 +27,7 @@ Django 博客系统 、REST等
 ## Celery
 - [异步任务利器Celery(一)介绍](http://www.cnblogs.com/linxiyue/p/7502561.html)
 - [异步任务利器Celery(二)在django项目中使用Celery](http://www.cnblogs.com/linxiyue/p/7518535.html)
+- [django celery demo](https://github.com/celery/celery/tree/master/examples/django)
 
 ## 压力测试
 - [用Webbench进行网站压力测试](http://blog.csdn.net/jk110333/article/details/9190687)
