@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^core/set/', include('app.setting.urls')),
     url(r'^core/blog/', include('app.blog.urls')),
     # url(r'^admin/', include(admin.site.urls)),
+    url(r'^rest/', include('app.rest.urls')),
 ]
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += blog_urls

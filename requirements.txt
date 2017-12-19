@@ -5,6 +5,7 @@ bs4==0.0.1
 celery==4.1.0
 Django==1.11.3
 django-redis==4.8.0
+djangorestframework==3.7.3
 gevent==1.2.2
 greenlet==0.4.12
 kombu==4.1.0
