@@ -16,17 +16,19 @@ Django 博客系统 、REST等
 
 使用的css框架 ace Admin， 网址：
 - [Ace Admin](http://ace.jeka.by/index.html)
-
 - [Vue+Django REST Framework生鲜电商项目学习笔记——概览 ](http://lawtech0902.com/2017/11/03/vue-django-1-1/)
 
 ## 缓存
-https://python.freelycode.com/contribution/detail/618
+- [Django中使用Redis进行缓存](https://python.freelycode.com/contribution/detail/618)
+- [Caching in Django With Redis ](https://realpython.com/blog/python/caching-in-django-with-redis/)
+- [Django缓存系统](http://www.cnblogs.com/linxiyue/p/7494540.html)
+- [Django分析之使用redis缓存服务器](http://www.cnblogs.com/fuhuixiang/p/4174896.html)
 
-https://realpython.com/blog/python/caching-in-django-with-redis/
+## Celery
+- [异步任务利器Celery(一)介绍](http://www.cnblogs.com/linxiyue/p/7502561.html)
+- [异步任务利器Celery(二)在django项目中使用Celery](http://www.cnblogs.com/linxiyue/p/7518535.html)
 
-http://www.najiaoluo.com/it/2680347.html
-
-http://www.cnblogs.com/linxiyue/p/7494540.html
-
-http://www.cnblogs.com/fuhuixiang/p/4174896.html
+## 压力测试
+- [用Webbench进行网站压力测试](http://blog.csdn.net/jk110333/article/details/9190687)
+webbench -c 1000 -t 30 http://192.168.1.24:8080/article/1/
 

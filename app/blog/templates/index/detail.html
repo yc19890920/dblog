@@ -32,7 +32,7 @@
                 <!-- Blog Search Well -->
 
                 <div class="well">
-                    <h4>Blog Search</h4>
+                    <h4>博客搜索</h4>
                     <form action="{% url 'search' %}" method="get">
                         <div class="input-group">
                             <input type="text" name="search_for" class="form-control">
@@ -50,12 +50,10 @@
                 <!--tag well-->
                 {% include "index/category.html" %}
 
-
-
                 <!-- Side Widget Well -->
                 <div class="well">
                     <h4><span class="glyphicon glyphicon-align-justify"></span>    博客介绍</h4>
-                    <p>欢迎来到我的个人博客，此博客主要用于记录技术随笔，个人感想等各种杂文。由于初学编程，个中纰漏，望请指出，谢谢！</p>
+                    <p>欢迎来到我的个人博客，此博客主要用于记录技术随笔，个人感想等各种杂文。个中纰漏，望请指出，谢谢！</p>
                 </div>
 
             </div>
@@ -63,4 +61,4 @@
 
     </div>
 
-{% endblock content %}
+{% endblock %}

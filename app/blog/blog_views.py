@@ -16,6 +16,10 @@ from django.db.models import Q
 from app.blog.forms import SuggestForm, BlogCommentForm
 from django.shortcuts import get_object_or_404, redirect, get_list_or_404
 
+from libs.celery.tasks_blog import celery_send_email
+
+import logging
+logger = logging.getLogger(__name__)
 
 def index(request):
     article_list = Article.objects.filter(status='p')
@@ -41,6 +45,7 @@ def detail(request, article_id):
     })
 
 
+@cache_page(60 * 15)
 def category(request, cate_id):
     article_list = Article.objects.filter(category=cate_id, status='p')
     cate_obj = get_object_or_404(Category, pk=cate_id)
@@ -52,6 +57,7 @@ def category(request, cate_id):
     })
 
 
+@cache_page(60 * 15)
 def tag(request, tag_id):
     article_list = Article.objects.filter(tags=tag_id, status='p')
     tag_obj = get_object_or_404(Tag, pk=tag_id)
@@ -92,25 +98,27 @@ def comment(request, article_id):
             return redirect('detail', article_id=article_id)
 
 
-
+@cache_page(60 * 30)
 def about(request):
     form = SuggestForm()
     if request.method == 'POST':
         form = SuggestForm(request.POST)
         if form.is_valid():
-            suggest_data = form.cleaned_data['suggest']
-            new_record = Suggest(suggest=suggest_data)
-            new_record.save()
-            # try:
-            #     使用celery并发处理邮件发送的任务
-            # celery_send_email.delay(u'访客意见', suggest_data, 'tomming233@sina.com', ['tomming233@163.com'])
-            # except Exception as e:
-            #     logger.error(u"邮件发送失败: {}".format(e))
-            # return redirect('app:thanks')
+            content = form.cleaned_data['content']
+            o = Suggest(content=content)
+            o.save()
+            try:
+                # 使用celery并发处理邮件发送的任务
+                celery_send_email.delay(u'访客意见', content, ['1793302800@qq.com'])
+            except Exception as e:
+                # print '------------222222----'
+                logger.error(u"邮件发送失败: {}".format(e))
+            # print '------------111---------'
+            return redirect('thanks')
     return render(request, 'index/about.html', {
         'form': form
     })
 
 
 def thanks(request):
-    return render(request, 'blog/thanks.html')
+    return render(request, 'index/thanks.html')
