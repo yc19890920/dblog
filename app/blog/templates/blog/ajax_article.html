@@ -1,6 +1,8 @@
 <td>{{ number }}</td>
 <td>{{ d.title|default_if_none:'' }}</td>
 <td>{{ d.get_status_display }}</td>
+<td>{{ d.auth|default_if_none:'' }}</td>
+<td>{{ d.source|default_if_none:'' }}</td>
 <td>{{ d.views }}</td>
 <td>{{ d.likes }}</td>
 <td>{{ d.topped_display }}</td>

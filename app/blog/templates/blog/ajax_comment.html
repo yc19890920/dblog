@@ -1,5 +1,6 @@
 <td>{{ number }}</td>
 <td>{{ d.username|default_if_none:'' }}</td>
+<td>{{ d.email|default_if_none:'' }}</td>
 <td>{{ d.content|default_if_none:'' }}</td>
 <td>{{ d.created|date:"Y-m-d H:i" }}</td>
 <td>{{ d.article.title }}</td>

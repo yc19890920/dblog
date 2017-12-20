@@ -20,6 +20,12 @@ class ArticleForm(forms.ModelForm):
             raise forms.ValidationError(_(u"请填写正文"))
         return data
 
+    def clean_auth(self):
+        data = self.cleaned_data['auth'].strip()
+        if not data:
+            raise forms.ValidationError(_(u"请填写作者"))
+        return data
+
     def clean_abstract(self):
         data = self.cleaned_data['abstract']
         if not data:
@@ -28,13 +34,13 @@ class ArticleForm(forms.ModelForm):
 
     class Meta:
         model = Article
-        fields = ["title", "content",  "status", "abstract", "topped", 'category', 'tags']
+        fields = ["title", "content",  'auth',  'source', "status", "abstract", "topped", 'category', 'tags']
 
 
 class SuggestForm(forms.ModelForm):
     class Meta:
         model = Suggest
-        fields = ["content"]
+        fields = ["username", "email", "content"]
 
         widgets = {
             'content': forms.Textarea(attrs={

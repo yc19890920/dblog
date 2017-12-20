@@ -118,7 +118,7 @@ def ajax_article(request):
     order_column = data.get('order[0][column]', '')
     order_dir = data.get('order[0][dir]', '')
     search = data.get('search[value]', '')
-    colums = ['id', 'title', 'status', 'views', 'likes', 'topped', 'created', 'updated', 'category']
+    colums = ['id', 'title', 'status', 'auth', 'source', 'views', 'likes', 'topped', 'created', 'updated', 'category']
     lists = Article.objects.all()
     if search:
         lists = lists.filter(title__icontains=search)
@@ -198,7 +198,7 @@ def ajax_comment(request):
     order_column = data.get('order[0][column]', '')
     order_dir = data.get('order[0][dir]', '')
     search = data.get('search[value]', '')
-    colums = ['id', 'username', 'content', 'created', 'article']
+    colums = ['id', 'username', 'email', 'content', 'created', 'article']
     lists = BlogComment.objects.all()
     if search:
         lists = lists.filter(content__icontains=search)
@@ -251,7 +251,7 @@ def ajax_suggest(request):
     order_column = data.get('order[0][column]', '')
     order_dir = data.get('order[0][dir]', '')
     search = data.get('search[value]', '')
-    colums = ['id', 'content', 'created']
+    colums = ['id', 'username', 'email', 'content', 'created']
     lists = Suggest.objects.all()
     if search:
         lists = lists.filter(suggest__icontains=search)

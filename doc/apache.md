@@ -1,13 +1,15 @@
 ## apache2 配置
 
-1. 修改 /etc/apache2/ports.conf
+1. 修改 静态目录 sudo chown ubuntu:www-data -R static/
+
+2. 修改 /etc/apache2/ports.conf
 ```
 添加一行
 Listen 8080
 ```
 
 
-2. 配置 /etc/apache2/conf-enabled/dblog.conf
+3. 配置 /etc/apache2/conf-enabled/dblog.conf
 
 ```
 WSGIPassAuthorization On

@@ -46,6 +46,8 @@ class Article(models.Model):
     views = models.PositiveIntegerField(u'阅读量', default=0)
     likes = models.PositiveIntegerField(u'点赞数', default=0)
     topped = models.BooleanField(u'置顶', default=False)
+    auth = models.CharField(u"作者", max_length=50, null=False, blank=False)
+    source = models.CharField(u"来源", max_length=50, null=True, blank=True)
     # 目录分类
     # on_delete 当指向的表被删除时，将该项设为空
     category = models.ForeignKey(Category, verbose_name=u'分类', null=True, on_delete=models.SET_NULL)
@@ -116,7 +118,8 @@ class ArticleTags(models.Model):
         db_table = 'blog_article_tags'
 
 class BlogComment(models.Model):
-    username = models.CharField(u'你的名字', max_length=100)
+    username = models.CharField(u'你的名称', max_length=100)
+    email = models.CharField(u"你的邮箱", max_length=100)
     content = models.TextField(u'评论内容')
     created = models.DateTimeField(u'创建时间', auto_now_add=True)
     article = models.ForeignKey(Article, verbose_name=u'评论所属文章', on_delete=models.CASCADE)
@@ -131,6 +134,8 @@ class BlogComment(models.Model):
 class Suggest(models.Model):
     """ 意见存储
     """
+    username = models.CharField(u'你的名称', max_length=100)
+    email = models.CharField(u"你的邮箱", max_length=100)
     content = models.TextField(u'建议', max_length=200)
     created = models.DateTimeField(u'创建时间', auto_now_add=True)
 
