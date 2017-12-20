@@ -1,7 +1,14 @@
 ## apache2 配置
-- /etc/apache2/conf-enabled
 
-### 配置
+1. 修改 /etc/apache2/ports.conf
+```
+添加一行
+Listen 8080
+```
+
+
+2. 配置 /etc/apache2/conf-enabled/dblog.conf
+
 ```
 WSGIPassAuthorization On
 <VirtualHost *:8080>

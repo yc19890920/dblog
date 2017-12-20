@@ -45,6 +45,9 @@ Django 博客系统 、REST等
 ## apache + nginx 部署
 详情请查看doc文件配置
 - [django, CentOS7+nginx(apache)+mod_wsgi+Python+Django，djangocentos7](http://www.bkjia.com/Pythonjc/1223954.html)
+### 部署nginx  要将rest_framework 模块下的 js css 移到 static目录下面即可
+
+
 ## 压力测试
 - [用Webbench进行网站压力测试](http://blog.csdn.net/jk110333/article/details/9190687)
 webbench -c 1000 -t 30 http://192.168.1.24:8080/article/1/
