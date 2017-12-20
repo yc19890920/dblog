@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.template.response import TemplateResponse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
+from django.db.models import query
 from app.blog.models import Tag, Category, Article, BlogComment, Suggest
 from app.blog.forms import ArticleForm
 
@@ -68,7 +69,8 @@ def ajax_lists(request, model):
     if search:
         lists = lists.filter(name__icontains=search)
 
-    if lists and order_column and int(order_column) < len(colums):
+    # if order_column and int(order_column) < len(colums):
+    if isinstance(query, query.QuerySet) and order_column and int(order_column) < len(colums):
         if order_dir == 'desc':
             lists = lists.order_by('-%s' % colums[int(order_column)])
         else:
@@ -86,7 +88,7 @@ def ajax_lists(request, model):
         start_num = 0
         page = 1
 
-    count = len(lists)
+    count = lists.count()
     if start_num >= count:
         page = 1
     paginator = Paginator(lists, length)
@@ -121,7 +123,7 @@ def ajax_article(request):
     if search:
         lists = lists.filter(title__icontains=search)
 
-    if lists and order_column and int(order_column) < len(colums):
+    if order_column and int(order_column) < len(colums):
         if order_dir == 'desc':
             lists = lists.order_by('-%s' % colums[int(order_column)])
         else:
@@ -139,7 +141,7 @@ def ajax_article(request):
         start_num = 0
         page = 1
 
-    count = len(lists)
+    count = lists.count()
     if start_num >= count:
         page = 1
     paginator = Paginator(lists, length)
@@ -201,7 +203,7 @@ def ajax_comment(request):
     if search:
         lists = lists.filter(content__icontains=search)
 
-    if lists and order_column and int(order_column) < len(colums):
+    if order_column and int(order_column) < len(colums):
         if order_dir == 'desc':
             lists = lists.order_by('-%s' % colums[int(order_column)])
         else:
@@ -219,7 +221,7 @@ def ajax_comment(request):
         start_num = 0
         page = 1
 
-    count = len(lists)
+    count = lists.count()
     if start_num >= count:
         page = 1
     paginator = Paginator(lists, length)
@@ -254,7 +256,7 @@ def ajax_suggest(request):
     if search:
         lists = lists.filter(suggest__icontains=search)
 
-    if lists and order_column and int(order_column) < len(colums):
+    if order_column and int(order_column) < len(colums):
         if order_dir == 'desc':
             lists = lists.order_by('-%s' % colums[int(order_column)])
         else:
@@ -272,7 +274,7 @@ def ajax_suggest(request):
         start_num = 0
         page = 1
 
-    count = len(lists)
+    count = lists.count()
     if start_num >= count:
         page = 1
     paginator = Paginator(lists, length)

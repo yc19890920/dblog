@@ -91,7 +91,7 @@ def ajax_cfilter(request):
     if search:
         lists = lists.filter( name__icontains=search )
 
-    if lists and order_column and int(order_column) < len(colums):
+    if order_column and int(order_column) < len(colums):
         if order_dir == 'desc':
             lists = lists.order_by('-%s' % colums[int(order_column)])
         else:
@@ -109,7 +109,7 @@ def ajax_cfilter(request):
         start_num = 0
         page = 1
 
-    count = len(lists)
+    count = lists.count()
     if start_num >= count:
         page = 1
     paginator = Paginator(lists, length)
