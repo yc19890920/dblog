@@ -1,0 +1,170 @@
+{% extends 'blogview/base.html' %}
+{% load staticfiles %}
+
+{% block title %} 活动日志 {% endblock %}
+
+{% block head_css %}
+    <style>
+        #form-talk .control-label {  text-align: left;  }
+        .talk-time {display: block; font-size: .8em; color: grey;}
+        article a, .talk-cont {word-wrap: break-word; word-break: break-all;}
+        @media print {  #talks {display: none}  }
+    </style>
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+
+        <div class="span8">
+
+            <!-- 文章 -->
+            <article class="article-wrap">
+                <div class="article-head">
+                    <a href="{% url 'detail' article.id %}" title="{{ article.title }}"><h3>{{ article.title }}</h3></a>
+                    <p><small>标签：</small>
+                        <small>
+                            {% for t in article.tags.all %}
+                                <a href="{% url 'tag' t.id %}"><span class="label label-success">{{ t.name }}</span></a>&nbsp;&nbsp;
+                            {% endfor %}
+                        </small>
+
+                    </p>
+                </div>
+                <div class="article-body">
+                    {{ article.content | safe}}
+                </div>
+                <div class="article-foot">
+                    {% if article.source %}
+                        <p><small>来源：{{ article.source }}</small></p>
+                    {% endif %}
+                    <p class="text-right"><a><small>{{ article.auth|default_if_none:"" }}</small></a><small> 发布于 {{ article.created|date:"Y-m-d H:i" }}</small></p>
+                </div>
+            </article>
+            <div>
+                <ul class="pager">
+                    <li class="previous"><a href="#">← 上一篇</a></li>
+                    <li><a href="javascript:;" title="点赞（+1）" class="award" data-post-id="{{ article.id }}" data-plus-ts="✓ 1">+ 1</a></li>
+                    <li class="next"><a href="#">下一篇 →</a></li>
+                </ul>
+            </div>
+
+            <!-- 文章评论 -->
+            <div id="talks">
+                <div id="list-talk">
+                    <fieldset>
+                        <legend>文章评论</legend>
+                        <table id="rows-talk" class="table table-hover table-striped table-bordered" style="">
+                            <tbody>
+                            <tr data-talk-id="11">
+                                <td class="talk-user span2">
+                                    <i class="icon-user"></i> pangyiguang<span class="talk-time">2014-06-11 20:24</span>
+                                </td>
+                                <td class="talk-cont">多么温暖的家乡</td>
+                            </tr>
+                            <tr data-talk-id="54">
+                                <td class="talk-user span2"><i class="icon-user"></i> syg<span class="talk-time">2017-10-12 17:16</span></td>
+                                <td class="talk-cont">化为尘埃，回归自然!</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                </div>
+
+                <form id="form-talk" class="form-horizontal" method="post" action="/voice?poid=18">
+                    {% csrf_token %}
+                    <fieldset>
+
+                        <div class="control-group">
+                            <label class="control-label" for="form-talk-name">你的名称：</label>
+                            <div class="controls">
+                                <input id="form-talk-name" name="name" class="span3" minlength="3" maxlength="64" required="" type="text">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="form-talk-mail">你的邮箱：</label>
+                            <div class="controls">
+                                <input id="form-talk-mail" name="mail" class="span3" minlength="6" maxlength="64" required="" type="email">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="form-talk-text">评论内容：</label>
+                            <div class="controls">
+                                <textarea id="form-talk-text" name="text" rows="8" class="input-block-level" required=""></textarea>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <div class="captcha span3" style="margin-left:0"></div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <button type="submit" class="btn btn-success input-large">提交评论</button>
+                                <span class="help-inline"></span>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+
+            </div>
+        </div>
+
+
+        <div class="sidebar span4">
+
+            {% include 'blogview/include/search.html' %}
+
+            <!-- 标签 -->
+            {% include 'blogview/include/tag.html' %}
+
+            <!-- 热门文章 -->
+            {% include 'blogview/include/hot.html' %}
+
+            <!-- 最新文章 -->
+            {% include 'blogview/include/new_art.html' %}
+
+            <!-- 相关文章 -->
+            {% include 'blogview/include/refer.html' %}
+
+        </div>
+
+
+    </div>
+
+
+    <a id="scrollUp" href="#top" title="" style="position: fixed; z-index: 2147483647; display: none;"></a>
+{% endblock %}
+
+{% block foot_js %}
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=30516020" charset="UTF-8"></script>
+    <script type="text/javascript">
+
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+        });
+
+        $(function() {
+            $('.pager .award').click(function() {
+                var i = $(this);
+                if (i.attr('disabled') != 'disabled') {
+                    i.attr('disabled', 'disabled').parent().addClass('disabled');
+                    $.post('{% url "score" %}', { 'poid': i.data('post-id'), }, function() {
+                        i.text(i.data('plus-ts'));
+                    }, 'json');
+                }
+            });
+        })
+
+        /*
+         var _gaq = _gaq || [];
+         _gaq.push(['_setAccount', 'UA-42785503-1']);
+         _gaq.push(['_trackPageview']);
+
+         (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+         */
+    </script>
+{% endblock %}

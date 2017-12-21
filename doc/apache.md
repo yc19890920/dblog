@@ -14,13 +14,13 @@ Listen 8080
 ```
 WSGIPassAuthorization On
 <VirtualHost *:8080>
-ServerName dgblog.com
-WSGIProcessGroup dgblog.com
+ServerName djangoblog.com
+WSGIProcessGroup djangoblog.com
 
-WSGIDaemonProcess dgblog.com python-path=/home/python/git/dblog:/home/python/pyenv/versions/django-blog/lib/python2.7/site-packages
+WSGIDaemonProcess djangoblog.com python-path=/home/python/git/dblog:/home/python/pyenv/versions/django-blog/lib/python2.7/site-packages
 WSGIScriptAlias / /home/python/git/dblog/dblog/wsgi.py
-ErrorLog "/home/python/log/dblog_err"
-CustomLog "/home/python/log/dblog" common
+ErrorLog "/home/python/log/djangoblog_err"
+CustomLog "/home/python/log/djangoblog" common
 
 DocumentRoot "/home/python/git/dblog"
 

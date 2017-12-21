@@ -29,7 +29,7 @@ class ArticleForm(forms.ModelForm):
     def clean_abstract(self):
         data = self.cleaned_data['abstract']
         if not data:
-            data = clearHtmlTags(self.cleaned_data['content'].strip())[:54]
+            data = clearHtmlTags(self.cleaned_data['content'].strip())[:200]
         return data
 
     class Meta:

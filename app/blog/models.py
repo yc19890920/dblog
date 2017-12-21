@@ -42,7 +42,7 @@ class Article(models.Model):
     title = models.CharField(u'标题', max_length=100, null=False, blank=False, db_index=True)
     content = models.TextField(u'正文', null=False, blank=False)
     status = models.CharField(u'文章状态', max_length=1, choices=STATUS_CHOICES)
-    abstract = models.CharField(u'摘要', max_length=54, blank=True, null=True, help_text=u"可选项，若为空则摘取正文钱54个字符")
+    abstract = models.TextField(u'摘要', blank=True, null=True, help_text=u"可选项，若为空则摘取正文钱54个字符")
     views = models.PositiveIntegerField(u'阅读量', default=0)
     likes = models.PositiveIntegerField(u'点赞数', default=0)
     topped = models.BooleanField(u'置顶', default=False)
@@ -98,10 +98,14 @@ class Article(models.Model):
 
     @property
     def get_tags(self):
-        # print self.tags
-        # return self.tags
-        return ArticleTags.objects.filter(article=self)
-        # return self.tag_set.all()
+        return self.tags.all()
+
+    @property
+    def get_refer_ids(self):
+        # tag_ids = self.tags.all().values_list("id", flat=True)
+        tag_ids = ArticleTags.objects.filter(article=self).values_list("tag_id", flat=True)
+        article_ids = ArticleTags.objects.filter(tag_id__in=tag_ids).values_list("article_id", flat=True)
+        return article_ids
 
     def __str__(self):
         return smart_str(self.title)

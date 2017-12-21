@@ -10,8 +10,8 @@
 <td>{{ d.updated|date:"Y-m-d H:i" }}</td>
 <td>{{ d.category.name }}</td>
 <td>
-    {% for t in d.get_tags %}
-        <button class="btn btn-minier btn-primary"> {{ t.tag.name }}</button>
+    {% for t in d.tags.all %}
+        <button class="btn btn-minier btn-primary"> {{ t.name }}</button>
     {% endfor %}
 </td>
 <td>

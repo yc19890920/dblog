@@ -15,11 +15,11 @@ upstream django {
 server {
     # the port your site will be served on
     listen      80;
-    server_name  dgblog.com
+    server_name  djangoblog.com
 
    
-        access_log          /home/python/log/nginx_dg;
-        error_log           /home/python/log/nginx_dgerr;
+        access_log          /home/python/log/nginx_djangoblog;
+        error_log           /home/python/log/nginx_djangoblog_err;
 
         proxy_connect_timeout    600;
         proxy_read_timeout       600;
@@ -67,7 +67,6 @@ server {
         location = /404.html {
                  root            /home/python/git/dblog/templates/errpage;
         }
-
 }
 ```
 

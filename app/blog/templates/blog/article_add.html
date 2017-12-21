@@ -51,7 +51,7 @@
                             重置
                         </button>
 
-                         <a type="button" class="btn btn-link" href="{% url 'admin_article' %}">取消</a>
+                        <a type="button" class="btn btn-link" href="{% url 'admin_article' %}">取消</a>
 
                     </div>
                 </div>
@@ -63,16 +63,38 @@
 
 {% block css_block %}
     <link rel="stylesheet" href="{% static 'admin/assets/css/jquery-ui.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'admin/editor/css/default.css' %}" />
+    <!--<link rel="stylesheet" href="{% static 'admin/editor/css/default.css' %}" />-->
 {% endblock %}
 
 {% block js_block %}
-    <script charset="utf-8" src="{% static 'admin/editor/kindeditor.js' %}"></script>
-    <script charset="utf-8" src="{% static 'admin/editor/lang/zh_CN.js' %}"></script>
+
+    <!--<script charset="utf-8" src="{% static 'admin/editor/kindeditor.js' %}"></script>
+    <script charset="utf-8" src="{% static 'admin/editor/lang/zh_CN.js' %}"></script>-->
+
+    <script charset="utf-8" src="{% static 'blogview/cke/ckeditor.js' %}"></script>
+
 {% endblock %}
 
 {% block my_jsblock %}
     <script>
+        CKEDITOR.replace('id_content', {
+            height: 270,
+            filebrowserImageUploadUrl: '/admin/file/upload'
+        });
+
+        CKEDITOR.replace('id_abstract', {
+            // toolbarGroups: [
+            //     { name: 'mode'},
+            //     { name: 'pbckcode'},
+            //     { name: 'doctools'},
+            //     { name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
+            //     { name: 'about' }
+            // ],
+            height: 150,
+            filebrowserImageUploadUrl: '/admin/file/upload'
+        });
+    </script>
+    <!--<script>
         KindEditor.ready(function(K) {
             var options = {
                 width: '100%', minHeight: '500',
@@ -107,5 +129,5 @@
             };
             editor = K.create('#id_content', options);
         });
-    </script>
+    </script>-->
 {% endblock %}
