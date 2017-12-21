@@ -21,6 +21,9 @@ from app.blog.forms import SuggestForm, BlogCommentForm
 from app.blog import tools as cache
 from libs.tools import getClientIP
 
+import logging
+logger = logging.getLogger(__name__)
+
 def index(request):
     article_list = Article.objects.filter(status='p')
 
@@ -38,23 +41,32 @@ def index(request):
     })
 
 def detail(request, article_id):
+    article = Article.objects.get(id=article_id)
+    form = BlogCommentForm(article)
+    if request.method == "POST":
+        form = BlogCommentForm(article, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.SUCCESS, u'评论成功，谢谢！')
+            return redirect("detail", article_id=article_id)
+
     tag_list = cache.getTaglist()
     hot_list = cache.getHotlist()
-    newcom_list = cache.getNewCommontlist()
+    newart_list = cache.getNewArticlelist()
 
-    article = Article.objects.get(id=article_id)
-    refer_list = Article.objects.filter(status='p', id__in=article.get_refer_ids)
+    refer_list = Article.objects.filter(status='p', id__in=article.get_refer_ids).exclude(id=article_id)
     ip = getClientIP(request)
-    if cache.shouldIncrViews(ip):
+    if cache.shouldIncrViews(ip, article_id):
         article.views = F("views") +1
         article.save()
     return render(request, 'blogview/detail.html', {
+        "form": form,
         "article": article,
         "refer_list": refer_list,
 
         "tag_list": tag_list,
         "hot_list": hot_list,
-        "newart_list": newcom_list,
+        "newart_list": newart_list,
     })
 
 def score(request):
@@ -104,9 +116,20 @@ def search(request):
     else:
         return redirect('index')
 
-@cache_page(60*60)
+# @cache_page(60*60)
 def about(request):
     form = SuggestForm()
+    if request.method == "POST":
+        form = SuggestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            try:
+                # 使用celery并发处理邮件发送的任务
+                celery_send_email.delay(u'访客意见', form.cleaned_data['content'], ['1793302800@qq.com'])
+            except Exception as e:
+                logger.error(u"邮件发送失败: {}".format(e))
+            messages.add_message(request, messages.SUCCESS, u'您宝贵的意见已收到，谢谢！')
+            return redirect("about")
     return render(request, 'blogview/about.html', {
         "form": form,
     })

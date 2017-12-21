@@ -166,6 +166,7 @@ def article_add(request):
         form = ArticleForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.add_message(request, messages.SUCCESS, u'添加成功')
             return HttpResponseRedirect(reverse("admin_article"))
     return render(request, template_name="blog/article_add.html", context={
         "form": form,
@@ -180,6 +181,7 @@ def article_modify(request, article_id):
         form = ArticleForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
+            messages.add_message(request, messages.SUCCESS, u'修改成功')
             return HttpResponseRedirect(reverse("admin_article"))
     return render(request, template_name="blog/article_add.html", context={
         "form": form,

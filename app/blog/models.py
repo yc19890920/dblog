@@ -90,7 +90,7 @@ class Article(models.Model):
         ordering = ['-updated']
 
     def get_absolute_url(self):
-        return reverse('app:detail', kwargs={'article_id': self.pk})
+        return reverse('detail', kwargs={'article_id': self.pk})
 
     @property
     def topped_display(self):
@@ -106,6 +106,16 @@ class Article(models.Model):
         tag_ids = ArticleTags.objects.filter(article=self).values_list("tag_id", flat=True)
         article_ids = ArticleTags.objects.filter(tag_id__in=tag_ids).values_list("article_id", flat=True)
         return article_ids
+
+    @property
+    def blogcomments(self):
+        return self.blogcomment_set.order_by("-id")
+
+    def get_previous_obj(self):
+        return Article.objects.filter(id__lt=self.id).order_by("-id").first()
+
+    def get_next_obj(self):
+        return Article.objects.filter(id__gt=self.id).order_by("id").first()
 
     def __str__(self):
         return smart_str(self.title)

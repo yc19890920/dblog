@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+
+import re
+import json
 from django import forms
 from app.blog.models import Article, Suggest, BlogComment
 from django.utils.translation import ugettext_lazy as _
 from libs.tools import clearHtmlTags
+
+P = re.compile('^(\w|[-+=.])+@\w+([-.]\w+)*\.(\w+)$')
 
 class ArticleForm(forms.ModelForm):
 
@@ -34,37 +39,140 @@ class ArticleForm(forms.ModelForm):
 
     class Meta:
         model = Article
-        fields = ["title", "content",  'auth',  'source', "status", "abstract", "topped", 'category', 'tags']
+        fields = ["title", "content",  "abstract", 'auth',  'source', "status", "topped", 'category', 'tags']
 
 
 class SuggestForm(forms.ModelForm):
+
+    @property
+    def customer_errors(self):
+        # {"username": [{"message": "This field is required.", "code": "required"}],
+        #  "content": [{"message": "This field is required.", "code": "required"}],
+        # "email": [{"message": "This field is required.", "code": "required"}]}
+        errors = self.errors.as_json(escape_html=False)
+        if isinstance(errors, (str, basestring)):
+            return json.loads(errors)
+        return errors
+
+    def get_error(self, field):
+        errors = self.customer_errors
+        if field in errors:
+            return errors[field][0]["message"]
+        return None
+
+    @property
+    def username_err(self):
+        return self.get_error("username")
+
+    @property
+    def email_err(self):
+        return self.get_error("email")
+
+    @property
+    def content_err(self):
+        return self.get_error("content")
+
+    def clean_username(self):
+        data = self.cleaned_data['username'].strip()
+        if not data:
+            raise forms.ValidationError(_(u"请填写您的姓名"))
+        return data
+
+    def clean_content(self):
+        data = self.cleaned_data['content'].strip()
+        if not data:
+            raise forms.ValidationError(_(u"请填写您的留言"))
+        return data
+
+    def clean_email(self):
+        data = self.cleaned_data['email'].strip()
+        if not  P.match(data):
+            raise forms.ValidationError(_(u"请填写正确的邮箱"))
+        return data
+
     class Meta:
         model = Suggest
         fields = ["username", "email", "content"]
 
-        widgets = {
-            'content': forms.Textarea(attrs={
-                'placeholder': u'写下你的意见吧~',
-                'class': 'form-control',
-                'rows': 4,
-                'cols': 80,
-            })
-        }
+        # widgets = {
+        #     'content': forms.Textarea(attrs={
+        #         'placeholder': u'写下你的意见吧~',
+        #         'class': 'form-control',
+        #         'rows': 4,
+        #         'cols': 80,
+        #     })
+        # }
 
 class BlogCommentForm(forms.ModelForm):
+
+    article = forms.CharField(label=_(u'文章'), required=False, widget=forms.HiddenInput())
+
+    def __init__(self, article, *args, **kwargs):
+        super(BlogCommentForm, self).__init__(*args, **kwargs)
+        self.article = article
+
+    def clean_article(self):
+        return self.article
+
+    @property
+    def customer_errors(self):
+        # {"username": [{"message": "This field is required.", "code": "required"}],
+        #  "content": [{"message": "This field is required.", "code": "required"}],
+        # "email": [{"message": "This field is required.", "code": "required"}]}
+        errors = self.errors.as_json(escape_html=False)
+        if isinstance(errors, (str, basestring)):
+            return json.loads(errors)
+        return errors
+
+    def get_error(self, field):
+        errors = self.customer_errors
+        if field in errors:
+            return errors[field][0]["message"]
+        return None
+
+    @property
+    def username_err(self):
+        return self.get_error("username")
+
+    @property
+    def email_err(self):
+        return self.get_error("email")
+
+    @property
+    def content_err(self):
+        return self.get_error("content")
+
+    def clean_username(self):
+        data = self.cleaned_data['username'].strip()
+        if not data:
+            raise forms.ValidationError(_(u"请填写您的姓名"))
+        return data
+
+    def clean_content(self):
+        data = self.cleaned_data['content'].strip()
+        if not data:
+            raise forms.ValidationError(_(u"请填写您的留言"))
+        return data
+
+    def clean_email(self):
+        data = self.cleaned_data['email'].strip()
+        if not  P.match(data):
+            raise forms.ValidationError(_(u"请填写正确的邮箱"))
+        return data
+
     class Meta:
         model = BlogComment
-        fields = ["username", "content"]
+        fields = ["article", "username", "email", "content"]
 
-        widgets = {
-            'username': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': u'请输入昵称',
-                'aria-describedby': 'sizing-addon1',
-            }),
-            'content': forms.Textarea(attrs={
-                'placeholder': u'让我来说两句',
-                'class': 'form-control',
-                'rows': 4,
-            }),
-        }
+        # widgets = {
+        #     'username': forms.TextInput(attrs={
+        #         'class': 'form-control',
+        #         'placeholder': u'请输入昵称',
+        #         'aria-describedby': 'sizing-addon1',
+        #     }),
+        #     'content': forms.Textarea(attrs={
+        #         'placeholder': u'让我来说两句',
+        #         'class': 'form-control',
+        #         'rows': 4,
+        #     }),
+        # }

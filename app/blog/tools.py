@@ -81,9 +81,9 @@ def getNewCommontlist():
     return vals
 
 
-def shouldIncrViews(ip):
+def shouldIncrViews(ip, article_id):
     redis = get_redis_connection()
-    key = "dblog:{}:{}:article:view".format(REDIS_KEY, ip)
+    key = "dblog:{}:{}:{}:article:view".format(REDIS_KEY, ip, article_id)
     if redis.exists(key):
         return False
     p = redis.pipeline()

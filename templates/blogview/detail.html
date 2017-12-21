@@ -9,6 +9,16 @@
         .talk-time {display: block; font-size: .8em; color: grey;}
         article a, .talk-cont {word-wrap: break-word; word-break: break-all;}
         @media print {  #talks {display: none}  }
+
+        .control-group.has-error .control-label, .control-group.has-error .help-block, .control-group.has-error .help-inline {
+            color: #D16E6C;
+        }
+        .control-group.has-error input, .control-group.has-error select, .control-group.has-error textarea, .has-error {
+            border-color: #f2a696;
+            color: #D68273;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
     </style>
 {% endblock %}
 
@@ -42,69 +52,28 @@
             </article>
             <div>
                 <ul class="pager">
-                    <li class="previous"><a href="#">← 上一篇</a></li>
+                    {% if article.get_previous_obj %}
+                        <li class="previous"><a href="{% url 'detail' article.get_previous_obj.id %}">← 上一篇</a></li>
+                    {% else %}
+                        <li class="previous disabled"><a href="javascript:;">← 上一篇</a></li>
+                    {% endif %}
                     <li><a href="javascript:;" title="点赞（+1）" class="award" data-post-id="{{ article.id }}" data-plus-ts="✓ 1">+ 1</a></li>
-                    <li class="next"><a href="#">下一篇 →</a></li>
+                    {% if article.get_next_obj %}
+                        <li class="next"><a href="{% url 'detail' article.get_next_obj.id %}">下一篇 →</a></li>
+                    {% else %}
+                        <li class="next disabled"><a href="javascript:;">下一篇 →</a></li>
+                    {% endif %}
                 </ul>
             </div>
 
             <!-- 文章评论 -->
             <div id="talks">
-                <div id="list-talk">
-                    <fieldset>
-                        <legend>文章评论</legend>
-                        <table id="rows-talk" class="table table-hover table-striped table-bordered" style="">
-                            <tbody>
-                            <tr data-talk-id="11">
-                                <td class="talk-user span2">
-                                    <i class="icon-user"></i> pangyiguang<span class="talk-time">2014-06-11 20:24</span>
-                                </td>
-                                <td class="talk-cont">多么温暖的家乡</td>
-                            </tr>
-                            <tr data-talk-id="54">
-                                <td class="talk-user span2"><i class="icon-user"></i> syg<span class="talk-time">2017-10-12 17:16</span></td>
-                                <td class="talk-cont">化为尘埃，回归自然!</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </fieldset>
-                </div>
 
-                <form id="form-talk" class="form-horizontal" method="post" action="/voice?poid=18">
-                    {% csrf_token %}
-                    <fieldset>
+                <!-- 具体评论 -->
+                {% include 'blogview/include/talk.html' %}
 
-                        <div class="control-group">
-                            <label class="control-label" for="form-talk-name">你的名称：</label>
-                            <div class="controls">
-                                <input id="form-talk-name" name="name" class="span3" minlength="3" maxlength="64" required="" type="text">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="form-talk-mail">你的邮箱：</label>
-                            <div class="controls">
-                                <input id="form-talk-mail" name="mail" class="span3" minlength="6" maxlength="64" required="" type="email">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="form-talk-text">评论内容：</label>
-                            <div class="controls">
-                                <textarea id="form-talk-text" name="text" rows="8" class="input-block-level" required=""></textarea>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <div class="controls">
-                                <div class="captcha span3" style="margin-left:0"></div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <div class="controls">
-                                <button type="submit" class="btn btn-success input-large">提交评论</button>
-                                <span class="help-inline"></span>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
+                <!-- 评论表单 -->
+                {% include 'blogview/include/comment.html' %}
 
             </div>
         </div>

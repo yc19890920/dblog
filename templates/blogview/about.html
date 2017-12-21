@@ -9,7 +9,7 @@
         .control-group.has-error .control-label, .control-group.has-error .help-block, .control-group.has-error .help-inline {
             color: #D16E6C;
         }
-        .control-group.has-error input, .control-group.has-error select, .control-group.has-error textarea {
+        .control-group.has-error input, .control-group.has-error select, .control-group.has-error textarea, .has-error {
             border-color: #f2a696;
             color: #D68273;
             -webkit-box-shadow: none;
@@ -36,8 +36,8 @@
                 如果您有什么好的想法要告诉我，或者希望与我交换链接，我都表示荣幸以及对提供帮助的您的满怀感激。
             </p>
 
-            <div id="email" style="padding-top: 50px">
 
+            <div id="email" style="padding-top: 50px">
                 {% if messages %}
                     <article class="col-sm-12">
                         {% for message in messages %}
@@ -52,49 +52,36 @@
                     </article>
                 {% endif %}
 
-                <!--<article class="col-sm-12">
-                    <div class="alert alert-success fade in">
-                        <button class="close" data-dismiss="alert">
-                            ×
-                        </button>
-                        <i class="fa-fw fa fa-success"></i>
-                        <strong>Success</strong> 保存成功
-                    </div>
-                </article>
-
-                <article class="col-sm-12">
-                    <div class="alert alert-error fade in">
-                        <button class="close" data-dismiss="alert">
-                            ×
-                        </button>
-                        <i class="fa-fw fa fa-error"></i>
-                        <strong>Error</strong> 保存失败
-                    </div>
-                </article>-->
-
                 <form class="form-horizontal" method="POST">
                     {% csrf_token %}
 
                     <fieldset>
                         <legend>留言反馈</legend>
-                        <div class="control-group has-error">
-                            <label class="control-label" for="form-email-name">你的名称：</label>
+
+                        <div class="control-group {% if form.username_err %}has-error{% endif %}">
+                            <label class="control-label" for="id_username">你的名称：</label>
                             <div class="controls">
-                                <input id="form-email-name" type="text" name="name" class="span3" minlength="3" maxlength="64" required>
+                                <input id="id_username" name="username" type="text" value="{{ form.cleaned_data.username|default_if_none:"" }}" class="span3" minlength="3" maxlength="64" required>
+                                {% if form.username_err %}<p class="has-error">{{ form.username_err }}</p>{% endif %}
                             </div>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label" for="form-email-mail">你的邮箱：</label>
+
+                        <div class="control-group {% if form.email_err %}has-error{% endif %}">
+                            <label class="control-label" for="id_email">你的邮箱：</label>
                             <div class="controls">
-                                <input id="form-email-mail" type="email" name="mail" class="span3" minlength="6" maxlength="64" required>
+                                <input id="id_email" name="email" type="email" value="{{ form.cleaned_data.email|default_if_none:"" }}" class="span3" minlength="6" maxlength="64" required>
+                                {% if form.email_err %}<p class="has-error">{{ form.email_err }}</p>{% endif %}
                             </div>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label" for="form-email-text">留言反馈：</label>
+
+                        <div class="control-group {% if form.content_err %}has-error{% endif %}">
+                            <label class="control-label" for="id_content">留言反馈：</label>
                             <div class="controls">
-                                <textarea id="form-email-text" name="text" rows="8" class="span5" required></textarea>
+                                <textarea id="id_content" name="content" rows="8" class="span5" required>{{ form.cleaned_data.content|default_if_none:"" }}</textarea>
+                                {% if form.content_err %}<p class="has-error">{{ form.content_err }}</p>{% endif %}
                             </div>
                         </div>
+
                         <div class="control-group">
                             <div class="controls">
                                 <div class="captcha span3" style="margin-left:0"></div>
@@ -113,6 +100,5 @@
             </div>
         </div>
     </div>
-
 
 {% endblock %}

@@ -51,9 +51,6 @@
                                 <p>
                                     <small>标签：</small>
                                     <small>
-                                        {% for t in d.get_tags %}
-
-                                        {% endfor %}
                                         {% for t in d.tags.all %}
                                             <a href="{% url 'tag' t.id %}"><span class="label label-success">{{ t.name }}</span></a>&nbsp;&nbsp;
                                         {% endfor %}
@@ -62,7 +59,7 @@
                             </div>
 
                             <div class="article-body">
-                                {{ d.abstract | safe}}
+                                {{ d.abstract | safe }}
                             </div>
 
                             <div class="article-foot">
