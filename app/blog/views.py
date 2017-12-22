@@ -17,7 +17,7 @@ from app.blog.forms import ArticleForm
 @login_required
 def tag(request):
     if request.method == "POST":
-        add_tag(request, Tag, "admin_tag")
+        return add_tag(request, Tag, "admin_tag")
     return render(request, template_name="blog/tag.html", context={
         "model": "tag",
         "model_name": u"标签",
@@ -26,7 +26,7 @@ def tag(request):
 @login_required
 def category(request):
     if request.method == "POST":
-        add_tag(request, Category, "admin_category")
+        return add_tag(request, Category, "admin_category")
     return render(request, template_name="blog/tag.html", context={
         "model": "category",
         "model_name": u"分类",
