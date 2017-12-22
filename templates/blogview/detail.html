@@ -117,8 +117,9 @@
                 var i = $(this);
                 if (i.attr('disabled') != 'disabled') {
                     i.attr('disabled', 'disabled').parent().addClass('disabled');
+                    i.text(i.data('plus-ts'));
                     $.post('{% url "score" %}', { 'poid': i.data('post-id'), }, function() {
-                        i.text(i.data('plus-ts'));
+                        // i.text(i.data('plus-ts'));
                     }, 'json');
                 }
             });
