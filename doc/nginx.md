@@ -37,6 +37,12 @@ server {
             #expires 30d;
             #break;
         }
+        
+        location /media/ {
+            root /home/python/git/dblog/;
+            expires 30d;
+            break;
+        }
 
     # Django media
     #location /media  {

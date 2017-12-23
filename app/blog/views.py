@@ -6,10 +6,12 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.template.response import TemplateResponse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.db.models import query
+from django.conf import settings
 from app.blog.models import Tag, Category, Article, BlogComment, Suggest
 from app.blog.forms import ArticleForm
 
@@ -195,6 +197,81 @@ def article_modify(request, article_id):
         "form": form,
         "is_instance": True,
     })
+
+#
+# def gen_rnd_filename():
+#     filename_prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+#     return '%s%s' % (filename_prefix, str(random.randrange(1000, 10000)))
+#
+# @app.route('/ckupload/', methods=['POST'])
+# def ckupload():
+#     """CKEditor file upload"""
+#     error = ''
+#     url = ''
+#     callback = request.args.get("CKEditorFuncNum")
+#     if request.method == 'POST' and 'upload' in request.files:
+#         fileobj = request.files['upload']
+#         fname, fext = os.path.splitext(fileobj.filename)
+#         rnd_name = '%s%s' % (gen_rnd_filename(), fext)
+#         filepath = os.path.join(app.static_folder, 'upload', rnd_name)
+#         # 检查路径是否存在，不存在则创建
+#         dirname = os.path.dirname(filepath)
+#         if not os.path.exists(dirname):
+#             try:
+#                 os.makedirs(dirname)
+#             except:
+#                 error = 'ERROR_CREATE_DIR'
+#         elif not os.access(dirname, os.W_OK):
+#             error = 'ERROR_DIR_NOT_WRITEABLE'
+#         if not error:
+#             fileobj.save(filepath)
+#             url = url_for('static', filename='%s/%s' % ('upload', rnd_name))
+#     else:
+#         error = 'post error'
+#     res = """<script type="text/javascript">
+#   window.parent.CKEDITOR.tools.callFunction(%s, '%s', '%s');
+# </script>""" % (callback, url, error)
+#     response = make_response(res)
+#     response.headers["Content-Type"] = "text/html"
+#     return response
+
+import os
+import uuid
+from django.utils.encoding import smart_str
+
+@csrf_exempt
+@login_required
+def ckupload(request):
+    callback = request.GET.get("CKEditorFuncNum")
+    print '----- request.GET------',  request.GET
+    print '----- request.POST------',  request.POST
+    if request.method == 'POST' and request.FILES['upload']:
+        fileobj = request.FILES['upload']
+        # fileobj = request.FILES.get('upload', None)
+        content_type = fileobj.content_type
+        size = fileobj.size
+        print '-------------', content_type
+        print '-------------', size
+        fname = fileobj.name
+        fext = os.path.splitext(fname)[-1]
+        print '-------------', fext
+        print '-------------', fname
+        uuname = '{}{}'.format(str(uuid.uuid1()), fext)
+        abspath_uri = "{}ckupload/{}".format(settings.MEDIA_URL, uuname)
+        with open(os.path.join(settings.MEDIA_ROOT, 'ckupload', uuname), 'w') as f:
+            f.write(fileobj.read())
+
+        res = r"<script>window.parent.CKEDITOR.tools.callFunction("+callback+",'"+abspath_uri+"', '');</script>"
+        return HttpResponse(res)
+        # filename = smart_str(fileobj.name)
+        # suffix = filename.split('.')[-1]
+        print '-------------', content_type
+        print '-------------', size
+        print '-------------', fname
+        print '-------------', fext
+    raise Http404()
+
+
 
 ############################################################
 @login_required

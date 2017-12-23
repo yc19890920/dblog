@@ -19,7 +19,9 @@ Django 博客系统 、REST等
 - [Vue+Django REST Framework生鲜电商项目学习笔记——概览 ](http://lawtech0902.com/2017/11/03/vue-django-1-1/)
 
 ### 富文本编辑器
+- [CKEditor 4](https://ckeditor.com/ckeditor-4/download/)
 - [CKEditor 4](https://ckeditor.com/ckeditor-4/download/releases/)
+- [ckeditor的详细配置](http://www.blogjava.net/liangcmwn/archive/2011/10/13/361112.aspx)
 
 ## 缓存
 ### 本处只用到页面缓存，也可以部分缓存，还可以用redis处理异步任务等
@@ -48,6 +50,7 @@ Django 博客系统 、REST等
 ## apache + nginx 部署
 详情请查看doc文件配置
 - [django, CentOS7+nginx(apache)+mod_wsgi+Python+Django，djangocentos7](http://www.bkjia.com/Pythonjc/1223954.html)
+- [Django 部署(Apache)](https://code.ziqiangxuetang.com/django/django-deploy.html)
 ### 部署nginx  要将rest_framework 模块下的 js css 移到 static目录下面即可
 
 

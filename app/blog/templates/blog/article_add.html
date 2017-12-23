@@ -63,25 +63,23 @@
 
 {% block css_block %}
     <link rel="stylesheet" href="{% static 'admin/assets/css/jquery-ui.min.css' %}" />
-    <!--<link rel="stylesheet" href="{% static 'admin/editor/css/default.css' %}" />-->
 {% endblock %}
 
-{% block js_block %}
-
-    <!--<script charset="utf-8" src="{% static 'admin/editor/kindeditor.js' %}"></script>
-    <script charset="utf-8" src="{% static 'admin/editor/lang/zh_CN.js' %}"></script>-->
-
-    <script charset="utf-8" src="{% static 'blogview/cke/ckeditor.js' %}"></script>
-
-    <!--<script charset="utf-8" src="{% static 'ckeditor/ckeditor.js' %}"></script>-->
-{% endblock %}
+{% block js_block %}{% endblock %}
 
 {% block my_jsblock %}
+    <script charset="utf-8" src="{% static 'ckeditor/ckeditor.js' %}"></script>
+    <script src="{% static 'ckeditor/config.js' %}" type="text/javascript"></script>
     <script>
+
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+        });
+
         CKEDITOR.replace('id_content', {
             height: 270,
-            image_previewText: '',
-            filebrowserImageUploadUrl: '/admin/file/upload'
+            filebrowserImageUploadUrl: '{% url 'ckupload' %}'
+            // customConfig: '/static/ckeditor/config.js'
         });
 
         CKEDITOR.replace('id_abstract', {
@@ -93,8 +91,7 @@
             //     { name: 'about' }
             // ],
             height: 150,
-            image_previewText: '',
-            filebrowserImageUploadUrl: '/admin/file/upload'
+            filebrowserImageUploadUrl: '{% url 'ckupload' %}'
         });
     </script>
     <!--<script>

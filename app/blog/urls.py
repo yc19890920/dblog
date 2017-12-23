@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^article/ajax$', views.ajax_article, name='admin_article_ajax'),
     url(r'^article/add/$', views.article_add, name='article_add'),
     url(r'^article/(?P<article_id>\d+)/$', views.article_modify, name='article_modify'),
+    url(r'^ckupload/$', views.ckupload, name='ckupload'),
 
     url(r'^comment$', views.comment, name='admin_comment'),
     url(r'^comment/ajax$', views.ajax_comment, name='admin_comment_ajax'),

@@ -8,8 +8,20 @@
 Listen 8080
 ```
 
+3. 文件上传中文名乱码  /etc/apache2/nvvars
+```
+## The locale used by some modules like mod_dav
+# export LANG=C  注释掉
+添加以下：
+export LANG='zh_CN.UTF-8'
+export LC_ALL='zh_CN.UTF-8'
+```
 
-3. 配置 /etc/apache2/conf-enabled/dblog.conf
+4. 修改上传文件权限
+
+
+
+5. 配置 /etc/apache2/conf-enabled/dblog.conf
 
 ```
 WSGIPassAuthorization On
@@ -24,7 +36,11 @@ CustomLog "/home/python/log/djangoblog" common
 
 DocumentRoot "/home/python/git/dblog"
 
+# 存放用户上传图片等文件的位置，注意去掉#号
+Alias /media/ /home/python/git/dblog/media/
+# 静态文件(js/css/images)的存放位置
 Alias /static/ /home/python/git/dblog/static/
+
 <Directory /home/python/git/dblog/dblog>
         Require all granted
 </Directory>
@@ -35,5 +51,16 @@ Alias /static/ /home/python/git/dblog/static/
                 Require all granted
         </Files>
 </Directory>
+
+#<Directory /home/python/git/dblog/static>
+#        Order deny,allow
+#        Allow from all
+#</Directory>
+#
+#<Directory /home/python/git/dblog/media>
+#        Order deny,allow
+#        Allow from all
+#</Directory>
+
 </VirtualHost>
 ```
