@@ -92,4 +92,11 @@ def shouldIncrViews(ip, article_id):
     p.execute()
     return True
 
+def getLinks(ip, article_id):
+    redis = get_redis_connection()
+    key = "dblog:{}:{}:{}:article:links".format(REDIS_KEY, ip, article_id)
+    if redis.exists(key):
+        return False
+    return True
+
 

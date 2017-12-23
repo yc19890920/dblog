@@ -18,6 +18,9 @@ Django 博客系统 、REST等
 - [Ace Admin](http://ace.jeka.by/index.html)
 - [Vue+Django REST Framework生鲜电商项目学习笔记——概览 ](http://lawtech0902.com/2017/11/03/vue-django-1-1/)
 
+### 富文本编辑器
+- [CKEditor 4](https://ckeditor.com/ckeditor-4/download/releases/)
+
 ## 缓存
 ### 本处只用到页面缓存，也可以部分缓存，还可以用redis处理异步任务等
 - [Django中使用Redis进行缓存](https://python.freelycode.com/contribution/detail/618)

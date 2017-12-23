@@ -73,12 +73,14 @@
 
     <script charset="utf-8" src="{% static 'blogview/cke/ckeditor.js' %}"></script>
 
+    <!--<script charset="utf-8" src="{% static 'ckeditor/ckeditor.js' %}"></script>-->
 {% endblock %}
 
 {% block my_jsblock %}
     <script>
         CKEDITOR.replace('id_content', {
             height: 270,
+            image_previewText: '',
             filebrowserImageUploadUrl: '/admin/file/upload'
         });
 
@@ -91,6 +93,7 @@
             //     { name: 'about' }
             // ],
             height: 150,
+            image_previewText: '',
             filebrowserImageUploadUrl: '/admin/file/upload'
         });
     </script>

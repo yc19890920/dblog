@@ -109,6 +109,14 @@ def ajax_lists(request, model):
 ############################################################
 @login_required
 def article(request):
+    if request.method == "POST":
+        id = request.POST.get('id', "")
+        status = request.POST.get('status', "")
+        if status == "delete":
+            obj = Article.objects.filter(pk=id).first()
+            obj.delete()
+            messages.add_message(request, messages.SUCCESS, u'删除成功')
+            return HttpResponseRedirect(reverse("admin_article"))
     return render(request, template_name="blog/article.html", context={
     })
 
@@ -191,6 +199,14 @@ def article_modify(request, article_id):
 ############################################################
 @login_required
 def comment(request):
+    if request.method == "POST":
+        id = request.POST.get('id', "")
+        status = request.POST.get('status', "")
+        if status == "delete":
+            obj = BlogComment.objects.filter(pk=id).first()
+            obj.delete()
+            messages.add_message(request, messages.SUCCESS, u'删除成功')
+            return HttpResponseRedirect(reverse("admin_comment"))
     return render(request, template_name="blog/comment.html", context={
     })
 
@@ -244,6 +260,14 @@ def ajax_comment(request):
 ############################################################
 @login_required
 def suggest(request):
+    if request.method == "POST":
+        id = request.POST.get('id', "")
+        status = request.POST.get('status', "")
+        if status == "delete":
+            obj = Suggest.objects.filter(pk=id).first()
+            obj.delete()
+            messages.add_message(request, messages.SUCCESS, u'删除成功')
+            return HttpResponseRedirect(reverse("admin_suggest"))
     return render(request, template_name="blog/suggest.html", context={
     })
 
