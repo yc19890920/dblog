@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^article/add/$', views.article_add, name='article_add'),
     url(r'^article/(?P<article_id>\d+)/$', views.article_modify, name='article_modify'),
     url(r'^ckupload/$', views.ckupload, name='ckupload'),
+    url(r'^picture/$', views.picture, name='admin_picture'),
+    url(r'^picture/ajax$', views.ajax_picture, name='admin_picture_ajax'),
 
     url(r'^comment$', views.comment, name='admin_comment'),
     url(r'^comment/ajax$', views.ajax_comment, name='admin_comment_ajax'),

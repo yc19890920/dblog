@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import re
+import os
 import json
+import uuid
+import random
 from django.shortcuts import render
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -12,7 +15,8 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.db.models import query
 from django.conf import settings
-from app.blog.models import Tag, Category, Article, BlogComment, Suggest
+from django.utils.encoding import smart_str
+from app.blog.models import Tag, Category, Article, BlogComment, Suggest, CKeditorPictureFile
 from app.blog.forms import ArticleForm
 
 ############################################################
@@ -190,7 +194,8 @@ def article_modify(request, article_id):
     if request.method == "POST":
         form = ArticleForm(request.POST, instance=obj)
         if form.is_valid():
-            form.save()
+            obj2 = form.save()
+            form.referPicture(obj2)
             messages.add_message(request, messages.SUCCESS, u'修改成功')
             return HttpResponseRedirect(reverse("admin_article"))
     return render(request, template_name="blog/article_add.html", context={
@@ -198,80 +203,97 @@ def article_modify(request, article_id):
         "is_instance": True,
     })
 
-#
-# def gen_rnd_filename():
-#     filename_prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-#     return '%s%s' % (filename_prefix, str(random.randrange(1000, 10000)))
-#
-# @app.route('/ckupload/', methods=['POST'])
-# def ckupload():
-#     """CKEditor file upload"""
-#     error = ''
-#     url = ''
-#     callback = request.args.get("CKEditorFuncNum")
-#     if request.method == 'POST' and 'upload' in request.files:
-#         fileobj = request.files['upload']
-#         fname, fext = os.path.splitext(fileobj.filename)
-#         rnd_name = '%s%s' % (gen_rnd_filename(), fext)
-#         filepath = os.path.join(app.static_folder, 'upload', rnd_name)
-#         # 检查路径是否存在，不存在则创建
-#         dirname = os.path.dirname(filepath)
-#         if not os.path.exists(dirname):
-#             try:
-#                 os.makedirs(dirname)
-#             except:
-#                 error = 'ERROR_CREATE_DIR'
-#         elif not os.access(dirname, os.W_OK):
-#             error = 'ERROR_DIR_NOT_WRITEABLE'
-#         if not error:
-#             fileobj.save(filepath)
-#             url = url_for('static', filename='%s/%s' % ('upload', rnd_name))
-#     else:
-#         error = 'post error'
-#     res = """<script type="text/javascript">
-#   window.parent.CKEDITOR.tools.callFunction(%s, '%s', '%s');
-# </script>""" % (callback, url, error)
-#     response = make_response(res)
-#     response.headers["Content-Type"] = "text/html"
-#     return response
-
-import os
-import uuid
-from django.utils.encoding import smart_str
-
 @csrf_exempt
 @login_required
 def ckupload(request):
     callback = request.GET.get("CKEditorFuncNum")
-    print '----- request.GET------',  request.GET
-    print '----- request.POST------',  request.POST
     if request.method == 'POST' and request.FILES['upload']:
         fileobj = request.FILES['upload']
-        # fileobj = request.FILES.get('upload', None)
         content_type = fileobj.content_type
         size = fileobj.size
-        print '-------------', content_type
-        print '-------------', size
         fname = fileobj.name
         fext = os.path.splitext(fname)[-1]
-        print '-------------', fext
-        print '-------------', fname
-        uuname = '{}{}'.format(str(uuid.uuid1()), fext)
+        uuname = '{}-{}{}'.format(str(uuid.uuid1()), random.randint(1, 100000), fext)
         abspath_uri = "{}ckupload/{}".format(settings.MEDIA_URL, uuname)
+        try:
+            fname = fname.encode("utf-8")
+        except BaseException as e:
+            fname = uuname
+            print e
+        CKeditorPictureFile.objects.create(filename=fname, filetype=content_type, filepath=abspath_uri, filesize=size)
         with open(os.path.join(settings.MEDIA_ROOT, 'ckupload', uuname), 'w') as f:
             f.write(fileobj.read())
-
         res = r"<script>window.parent.CKEDITOR.tools.callFunction("+callback+",'"+abspath_uri+"', '');</script>"
         return HttpResponse(res)
-        # filename = smart_str(fileobj.name)
-        # suffix = filename.split('.')[-1]
-        print '-------------', content_type
-        print '-------------', size
-        print '-------------', fname
-        print '-------------', fext
     raise Http404()
 
 
+@login_required
+def picture(request):
+    if request.method == "POST":
+        status = request.POST.get('status', "")
+        if status == "delete":
+            id = request.POST.get('id', "")
+            obj = CKeditorPictureFile.objects.filter(article_id=0, pk=id).first()
+            if obj: obj.delete()
+            messages.add_message(request, messages.SUCCESS, u'删除成功')
+        if status == "deleteall":
+            ids = ( request.POST.get('ids', False) ).split(',')
+            lists = CKeditorPictureFile.objects.filter(article_id=0, id__in=ids)
+            for obj in lists:
+                obj.delete()
+            messages.add_message(request, messages.SUCCESS, u'删除成功')
+        return HttpResponseRedirect(reverse("admin_picture"))
+
+    return render(request, template_name="blog/picture.html", context={
+    })
+
+@login_required
+def ajax_picture(request):
+    data = request.GET
+    order_column = data.get('order[0][column]', '')
+    order_dir = data.get('order[0][dir]', '')
+    search = data.get('search[value]', '')
+    colums = ['id', 'id', 'filename', 'filetype', 'filepath', 'filesize', 'article_id', 'id']
+    lists = CKeditorPictureFile.objects.all()
+    if search:
+        lists = lists.filter(filename__icontains=search)
+
+    if order_column and int(order_column) < len(colums):
+        if order_dir == 'desc':
+            lists = lists.order_by('-%s' % colums[int(order_column)])
+        else:
+            lists = lists.order_by('%s' % colums[int(order_column)])
+
+    try:
+        length = int(data.get('length', 1))
+    except ValueError:
+        length = 1
+
+    try:
+        start_num = int(data.get('start', '0'))
+        page = start_num / length + 1
+    except ValueError:
+        start_num = 0
+        page = 1
+
+    count = lists.count()
+    if start_num >= count:
+        page = 1
+    paginator = Paginator(lists, length)
+    try:
+        lists = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        lists = paginator.page(paginator.num_pages)
+    rs = {"sEcho": 0, "iTotalRecords": count, "iTotalDisplayRecords": count, "aaData": []}
+    re_str = '<td.*?>(.*?)</td>'
+    number = length * (page-1) + 1
+    for d in lists.object_list:
+        t = TemplateResponse(request, 'blog/ajax_picture.html', {'d': d, 'number': number})
+        t.render()
+        rs["aaData"].append(re.findall(re_str, t.content, re.DOTALL))
+        number += 1
+    return HttpResponse(json.dumps(rs), content_type="application/json")
 
 ############################################################
 @login_required

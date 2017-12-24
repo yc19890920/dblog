@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import os
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from app.blog.choices import STATUS_CHOICES
 from django.utils.encoding import smart_str
 
@@ -89,6 +91,11 @@ class Article(models.Model):
         # 即当从数据库中取出文章时，以文章最后修改时间逆向排序
         ordering = ['-updated']
 
+    def delete(self, using=None, keep_parents=False):
+        for obj in CKeditorPictureFile.objects.filter(article_id=self.id):
+            obj.delete()
+        super(Article, self).delete(using=using, keep_parents=keep_parents)
+
     def get_absolute_url(self):
         return reverse('detail', kwargs={'article_id': self.pk})
 
@@ -122,6 +129,38 @@ class Article(models.Model):
 
     __repr__ = __str__
 
+
+class CKeditorPictureFile(models.Model):
+
+    article_id = models.IntegerField(u"文章ID", default=0, db_index=True)
+    filename = models.CharField(u"图片名", max_length=100, null=False, blank=False)
+    filetype = models.CharField(u"图片类型", max_length=100, null=False, blank=False)
+    filepath = models.CharField(u'文件路径', max_length=200, unique=True, null=True, blank=True)
+    filesize = models.IntegerField(u'文件大小', default=0)
+    created = models.DateTimeField(u'创建时间', auto_now_add=True)
+    updated = models.DateTimeField(u'修改时间', auto_now=True)
+
+    class Meta:
+        db_table = 'blog_picture'
+
+    def __str__(self):
+        return smart_str(self.filepath)
+
+    def delete(self, using=None, keep_parents=False):
+        self.removepath()
+        super(CKeditorPictureFile, self).delete(using=using, keep_parents=keep_parents)
+
+    def removepath(self):
+        path = os.path.join(settings.BASE_DIR, self.filepath[1:])
+        if os.path.exists(path):
+            os.remove( path )
+
+    @property
+    def article(self):
+        obj = Article.objects.filter(pk=self.article_id).first()
+        return obj and obj.title or None
+
+    __repr__ = __str__
 
 class ArticleTags(models.Model):
     article = models.ForeignKey(Article)
