@@ -42,7 +42,11 @@ phpMyAdmin: http://192.168.181.129:88/phpmyadmin/
 
 
 ## 备份数据库
-- mysqldump -u dblog -P 3306 -p dblog > ~/git/dblog/doc/data.sql
+```
+mysqldump -u dblog -P 3306 -p dblog > ~/git/dblog/doc/data.sql
+```
 
 ## 数据还原
-- mysql -u root -p dblog < ~/git/dblog/doc/data.sql
+```
+mysql -u root -p dblog < ~/git/dblog/doc/data.sql
+```
