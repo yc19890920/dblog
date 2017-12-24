@@ -8,14 +8,19 @@
 Listen 8080
 ```
 
-3. 文件上传中文名乱码  /etc/apache2/nvvars
+3. 文件上传中文名乱码  vim /etc/apache2/envvars 
+
 ```
-## The locale used by some modules like mod_dav
-# export LANG=C  注释掉
-添加以下：
+文件最后添加以下：
 export LANG='zh_CN.UTF-8'
 export LC_ALL='zh_CN.UTF-8'
+
+nginx添加
+vim /etc/nginx/nginx.conf 
+http 中添加：
+http { ...  charset  utf-8; .. }
 ```
+
 
 4. 修改上传文件权限
 - ps -ef | grep apache 查看apache 权限
