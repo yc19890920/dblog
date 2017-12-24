@@ -18,6 +18,8 @@ export LC_ALL='zh_CN.UTF-8'
 ```
 
 4. 修改上传文件权限
+- ps -ef | grep apache 查看apache 权限
+- sudo chown -R www-data:www-data media/ 
 
 
 
