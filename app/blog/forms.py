@@ -89,34 +89,6 @@ class SuggestForm(forms.ModelForm):
         #     })
         # }
 
-    @property
-    def customer_errors(self):
-        # {"username": [{"message": "This field is required.", "code": "required"}],
-        #  "content": [{"message": "This field is required.", "code": "required"}],
-        # "email": [{"message": "This field is required.", "code": "required"}]}
-        errors = self.errors.as_json(escape_html=False)
-        if isinstance(errors, (str, basestring)):
-            return json.loads(errors)
-        return errors
-
-    def get_error(self, field):
-        errors = self.customer_errors
-        if field in errors:
-            return errors[field][0]["message"]
-        return None
-
-    @property
-    def username_err(self):
-        return self.get_error("username")
-
-    @property
-    def email_err(self):
-        return self.get_error("email")
-
-    @property
-    def content_err(self):
-        return self.get_error("content")
-
 class BlogCommentForm(forms.ModelForm):
 
     article = forms.CharField(label=_(u'文章'), required=False, widget=forms.HiddenInput())
@@ -149,28 +121,3 @@ class BlogCommentForm(forms.ModelForm):
     class Meta:
         model = BlogComment
         fields = ["article", "username", "email", "content"]
-
-    @property
-    def customer_errors(self):
-        errors = self.errors.as_json(escape_html=False)
-        if isinstance(errors, (str, basestring)):
-            return json.loads(errors)
-        return errors
-
-    def get_error(self, field):
-        errors = self.customer_errors
-        if field in errors:
-            return errors[field][0]["message"]
-        return None
-
-    @property
-    def username_err(self):
-        return self.get_error("username")
-
-    @property
-    def email_err(self):
-        return self.get_error("email")
-
-    @property
-    def content_err(self):
-        return self.get_error("content")
