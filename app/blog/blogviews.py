@@ -48,7 +48,7 @@ def detail(request, article_id):
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.SUCCESS, u'评论成功，谢谢！')
-            current_uri = "{}#list-talk".format( reverse("detail", args=(article_id, ) ) )
+            current_uri = "{}#list-talk".format( reverse( "detail", args=(article_id,) ) )
             return HttpResponseRedirect(current_uri)
             # return redirect("detail", article_id=article_id)
 
@@ -56,6 +56,7 @@ def detail(request, article_id):
     hot_list = cache.getHotlist()
     newart_list = cache.getNewArticlelist()
 
+    # 相关文章
     refer_list = Article.objects.filter(status='p', id__in=article.get_refer_ids).exclude(id=article_id)
     ip = getClientIP(request)
     if cache.shouldIncrViews(ip, article_id):

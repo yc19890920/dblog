@@ -58,34 +58,6 @@ class ArticleForm(forms.ModelForm):
 
 class SuggestForm(forms.ModelForm):
 
-    @property
-    def customer_errors(self):
-        # {"username": [{"message": "This field is required.", "code": "required"}],
-        #  "content": [{"message": "This field is required.", "code": "required"}],
-        # "email": [{"message": "This field is required.", "code": "required"}]}
-        errors = self.errors.as_json(escape_html=False)
-        if isinstance(errors, (str, basestring)):
-            return json.loads(errors)
-        return errors
-
-    def get_error(self, field):
-        errors = self.customer_errors
-        if field in errors:
-            return errors[field][0]["message"]
-        return None
-
-    @property
-    def username_err(self):
-        return self.get_error("username")
-
-    @property
-    def email_err(self):
-        return self.get_error("email")
-
-    @property
-    def content_err(self):
-        return self.get_error("content")
-
     def clean_username(self):
         data = self.cleaned_data['username'].strip()
         if not data:
@@ -117,17 +89,6 @@ class SuggestForm(forms.ModelForm):
         #     })
         # }
 
-class BlogCommentForm(forms.ModelForm):
-
-    article = forms.CharField(label=_(u'文章'), required=False, widget=forms.HiddenInput())
-
-    def __init__(self, article, *args, **kwargs):
-        super(BlogCommentForm, self).__init__(*args, **kwargs)
-        self.article = article
-
-    def clean_article(self):
-        return self.article
-
     @property
     def customer_errors(self):
         # {"username": [{"message": "This field is required.", "code": "required"}],
@@ -156,6 +117,17 @@ class BlogCommentForm(forms.ModelForm):
     def content_err(self):
         return self.get_error("content")
 
+class BlogCommentForm(forms.ModelForm):
+
+    article = forms.CharField(label=_(u'文章'), required=False, widget=forms.HiddenInput())
+
+    def __init__(self, article, *args, **kwargs):
+        super(BlogCommentForm, self).__init__(*args, **kwargs)
+        self.article = article
+
+    def clean_article(self):
+        return self.article
+
     def clean_username(self):
         data = self.cleaned_data['username'].strip()
         if not data:
@@ -178,15 +150,27 @@ class BlogCommentForm(forms.ModelForm):
         model = BlogComment
         fields = ["article", "username", "email", "content"]
 
-        # widgets = {
-        #     'username': forms.TextInput(attrs={
-        #         'class': 'form-control',
-        #         'placeholder': u'请输入昵称',
-        #         'aria-describedby': 'sizing-addon1',
-        #     }),
-        #     'content': forms.Textarea(attrs={
-        #         'placeholder': u'让我来说两句',
-        #         'class': 'form-control',
-        #         'rows': 4,
-        #     }),
-        # }
+    @property
+    def customer_errors(self):
+        errors = self.errors.as_json(escape_html=False)
+        if isinstance(errors, (str, basestring)):
+            return json.loads(errors)
+        return errors
+
+    def get_error(self, field):
+        errors = self.customer_errors
+        if field in errors:
+            return errors[field][0]["message"]
+        return None
+
+    @property
+    def username_err(self):
+        return self.get_error("username")
+
+    @property
+    def email_err(self):
+        return self.get_error("email")
+
+    @property
+    def content_err(self):
+        return self.get_error("content")

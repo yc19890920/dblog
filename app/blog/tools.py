@@ -7,6 +7,7 @@ from app.blog.models import Tag, Category, Article, BlogComment, Suggest
 
 REDIS_KEY = "cce7e4f11fc518f7fff230079ab0edc9"
 
+# 标签缓存
 def getTaglist():
     redis = get_redis_connection()
     key = "dblog:{}:tag".format(REDIS_KEY)
@@ -26,6 +27,7 @@ def getTaglist():
     return vals
 
 
+# 最热文章列表
 def getHotlist():
     redis = get_redis_connection()
     key = "dblog:{}:article:hot".format(REDIS_KEY)
@@ -44,6 +46,8 @@ def getHotlist():
             p.execute()
     return vals
 
+
+# 最新文章列表
 def getNewArticlelist():
     redis = get_redis_connection()
     key = "dblog:{}:article:new".format(REDIS_KEY)
@@ -62,6 +66,8 @@ def getNewArticlelist():
             p.execute()
     return vals
 
+
+# 最新评论
 def getNewCommontlist():
     redis = get_redis_connection()
     key = "dblog:{}:comment:new".format(REDIS_KEY)
@@ -81,6 +87,7 @@ def getNewCommontlist():
     return vals
 
 
+# 文章点击 缓存
 def shouldIncrViews(ip, article_id):
     redis = get_redis_connection()
     key = "dblog:{}:{}:{}:article:view".format(REDIS_KEY, ip, article_id)
@@ -91,6 +98,7 @@ def shouldIncrViews(ip, article_id):
     p.expire(key, 5*60)
     p.execute()
     return True
+
 
 def getLinks(ip, article_id):
     redis = get_redis_connection()
