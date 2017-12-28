@@ -76,7 +76,8 @@ def ajax_lists(request, model):
         lists = lists.filter(name__icontains=search)
 
     # if order_column and int(order_column) < len(colums):
-    if isinstance(query, query.QuerySet) and order_column and int(order_column) < len(colums):
+    # if isinstance(query, query.QuerySet) and order_column and int(order_column) < len(colums):
+    if order_column and int(order_column) < len(colums):
         if order_dir == 'desc':
             lists = lists.order_by('-%s' % colums[int(order_column)])
         else:
