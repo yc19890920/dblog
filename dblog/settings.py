@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'debug_toolbar',
+
     "rest_framework",
     'bootstrapform',
     'app.core',
@@ -47,6 +49,9 @@ INSTALLED_APPS = [
     'app.blog',
     'app.rest',
 ]
+
+# debug_toolbar
+INTERNAL_IPS = ('127.0.0.1',) #测试环境是在本机
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -56,6 +61,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'dblog.urls'
@@ -128,6 +135,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAdminUser',
     ]
 }
+# ---------------------------
 
 # Name of cache backend to cache user agents. If it not specified default
 # cache alias will be used. Set to `None` to disable caching.
@@ -185,3 +193,103 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     # MEDIA_ROOT,
 )
+
+
+# ---------------------------
+
+
+# ---------------------------
+
+# Celery settings
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+#: Only add pickle to this list if your broker is secured
+#: from unwanted access (see userguide/security.html)
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ENABLE_UTC = True
+CELERY_TIMEZONE = TIME_ZONE
+
+# ---------------------------
+"""
+
+# email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.sina.com"
+EMAIL_HOST_PASSWORD = 'hided'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER = "test@sina.com"
+EMAIL_PORT = 25
+EMAIL_USE_TLS = True
+
+"""
+
+
+"""
+# 编写日志配置
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'log_file': {
+            'level': "INFO",
+            "class": "logging.FileHandler",
+            "formatter": "verbose",
+            "filename": os.path.join(BASE_DIR, "logs/django.log"),
+        },
+        "faillog": {
+            'level': "ERROR",
+            "class": "logging.FileHandler",
+            "formatter": "verbose",
+            "filename": os.path.join(BASE_DIR, "logs/faillog.log"),
+        },
+        "dberror": {
+            'level': "ERROR",
+            "class": "logging.FileHandler",
+            "formatter": "verbose",
+            "filename": os.path.join(BASE_DIR, "logs/dberror.log"),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': False,
+            'level': 'INFO',
+        },
+        'app': {
+            'handlers': ['console', 'log_file'],
+            'propagate': False,
+            'level': 'DEBUG' if DEBUG else 'INFO',
+        },
+        'django.request': {
+            'handlers': ['log_file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        "faillog": {
+            "handlers": ['console', "faillog"],
+            "propagate": False,
+            "level": "ERROR",
+        },
+        "dberror": {
+            "handlers": ['console', "dberror"],
+            "propagate": False,
+            "level": "ERROR",
+        },
+    }
+}
+"""
+

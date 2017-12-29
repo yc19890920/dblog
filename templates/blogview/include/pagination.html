@@ -1,6 +1,6 @@
 <div class="pagination pagination-centered">
     <ul>
-        {% if article_list.exists %}
+        {% if article_list.has_previous or article_list.has_next %}
             <li><a href="?page=1">首页</a></li>
         {% else %}
             <li class="disabled"><a href="javascript:;">首页</a></li>

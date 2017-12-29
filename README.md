@@ -41,10 +41,15 @@ Django 博客系统 、REST等
 - [RESTful API 编写指南](https://blog.igevin.info/posts/restful-api-get-started-to-write/)
 
 ## Celery  
-### gevent + redis + mysql 一样可以达到异步的效果，可能更好，Celery只是看起来工整一些  ###
+### gevent + redis + mysql 一样可以达到异步的效果，Celery只是看起来工整一些(大型项目可以考虑)  ###
 - [异步任务利器Celery(一)介绍](http://www.cnblogs.com/linxiyue/p/7502561.html)
 - [异步任务利器Celery(二)在django项目中使用Celery](http://www.cnblogs.com/linxiyue/p/7518535.html)
 - [django celery demo](https://github.com/celery/celery/tree/master/examples/django)
+
+## Django调试工具django-debug-toolbar
+- [django debug toolbar使用简介，及docker中使用](http://blog.csdn.net/permike/article/details/54706091)
+- [Django Debug Toolbar在Docker中的使用](https://zhuanlan.zhihu.com/p/31288654)
+- [Django Debug Toolbar在Docker中的使用](https://www.ctolib.com/topics-117992.html)
 
 
 ## apache + nginx 部署

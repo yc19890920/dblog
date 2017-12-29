@@ -148,7 +148,7 @@
                     </ul>
                 </li>
 
-            <li class="" id="nav_rest">
+                <li class="" id="nav_rest">
                     <a href="#" class="dropdown-toggle">
                         <i class="menu-icon fa fa-list"></i>
                         <span class="menu-text"> Restful API </span>
@@ -272,13 +272,12 @@
             var path = window.location.pathname;
             if ( path.indexOf('/core/set/')==0 ){
                 $('#nav_setting').addClass('active open');
-                $('#nav_setting').find("[href^='"+path+"']").parent().first().addClass('active');
             } else if ( path.indexOf('/core/blog/')==0 ){
                 $('#nav_blog').addClass('active open');
-                $('#nav_blog').find("[href^='"+path+"']").parent().first().addClass('active');
             } else {
                 $('#nav_blog').addClass('active open');
             };
+            $('#sidebar').find("[href^='"+path+"']").parent().first().addClass('active');
         });
 
     </script>
