@@ -9,22 +9,22 @@ Django 1.11 管理平台，博客, 页面缓存，celery，restful API，脚本�
 Screenshots
 -----------
 * About —— 关于我
-![about](doc/img/about.jpg)
+![about](doc/img/about.png)
 
 * Posts —— 文章
-![posts](doc/img/posts.jpg)
+![posts](doc/img/posts.png)
 
 * Login —— 登录
-![Login](doc/img/login.jpg)
+![Login](doc/img/login.png)
 
 * Article —— 文章管理
-![Article](doc/img/article.jpg)
+![Article](doc/img/article.png)
 
 * Article (Edit Post) 
-![article-edit](doc/img/article-edit.jpg)
+![article-edit](doc/img/article-edit.png)
 
 * Pic    —— 图片管理
-![Login](doc/img/pic.jpg)
+![Login](doc/img/pic.png)
 
 
 
