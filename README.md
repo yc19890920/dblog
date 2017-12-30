@@ -1,5 +1,5 @@
 # dblog
-Django 博客系统 、REST等
+Django 1.11 管理平台，博客, 页面缓存，celery，restful API，脚本等 
 
 ### Requirement
 ------------
@@ -9,22 +9,22 @@ Django 博客系统 、REST等
 Screenshots
 -----------
 * About —— 关于我
-![about](https://github.com/yc19890920/dblog/tree/master/doc/img/about.jpg)
+![about](doc/img/about.jpg)
 
 * Posts —— 文章
-![posts](https://github.com/yc19890920/dblog/tree/master/doc/img/posts.jpg)
+![posts](doc/img/posts.jpg)
 
 * Login —— 登录
-![Login](https://github.com/yc19890920/dblog/tree/master/doc/img/login.jpg)
+![Login](doc/img/login.jpg)
 
 * Article —— 文章管理
-![Article](https://github.com/yc19890920/dblog/tree/master/doc/img/article.jpg)
+![Article](doc/img/article.jpg)
 
 * Article (Edit Post) 
-![article-edit](https://github.com/yc19890920/dblog/tree/master/doc/img/article-edit.jpg)
+![article-edit](doc/img/article-edit.jpg)
 
 * Pic    —— 图片管理
-![Login](https://github.com/yc19890920/dblog/tree/master/doc/img/pic.jpg)
+![Login](doc/img/pic.jpg)
 
 
 
