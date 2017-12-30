@@ -1,8 +1,35 @@
 # dblog
 Django 博客系统 、REST等
 
-使用的 Django==1.11.X
+### Requirement
+------------
+(Python >= 2.7)
+* Django==1.11.3
 
+Screenshots
+-----------
+* About —— 关于我
+![about](https://github.com/yc19890920/dblog/tree/master/doc/img/about.jpg)
+
+* Posts —— 文章
+![posts](https://github.com/yc19890920/dblog/tree/master/doc/img/posts.jpg)
+
+* Login —— 登录
+![Login](https://github.com/yc19890920/dblog/tree/master/doc/img/login.jpg)
+
+* Article —— 文章管理
+![Article](https://github.com/yc19890920/dblog/tree/master/doc/img/article.jpg)
+
+* Article (Edit Post) 
+![article-edit](https://github.com/yc19890920/dblog/tree/master/doc/img/article-edit.jpg)
+
+* Pic    —— 图片管理
+![Login](https://github.com/yc19890920/dblog/tree/master/doc/img/pic.jpg)
+
+
+
+### 文档链接
+----
 参考文档：
 - [Django 1.11.6 文档](http://python.usyiyi.cn/translate/Django_111/index.html)
 - [Django 设计模式与最佳实践](https://wizardforcel.gitbooks.io/django-design-patterns-and-best-practices/index.html)
