@@ -39,6 +39,7 @@ Django 博客系统 、REST等
 - [Restful API 的设计规范](https://novoland.github.io/%E8%AE%BE%E8%AE%A1/2015/08/17/Restful%20API%20%E7%9A%84%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.html)
 - [RESTful API 设计指南](http://www.ruanyifeng.com/blog/2014/05/restful_api.html)
 - [RESTful API 编写指南](https://blog.igevin.info/posts/restful-api-get-started-to-write/)
+- [Django 中 REST API 的设计 ——包含权限设置](http://python.jobbole.com/87226/)
 
 ## Celery  
 ### gevent + redis + mysql 一样可以达到异步的效果，Celery只是看起来工整一些(大型项目可以考虑)  ###
@@ -47,6 +48,7 @@ Django 博客系统 、REST等
 - [django celery demo](https://github.com/celery/celery/tree/master/examples/django)
 
 ## Django调试工具django-debug-toolbar
+- [django debug toolbar 安装](https://www.phodal.com/blog/django-install-django-debug-toolbar/)
 - [django debug toolbar使用简介，及docker中使用](http://blog.csdn.net/permike/article/details/54706091)
 - [Django Debug Toolbar在Docker中的使用](https://zhuanlan.zhihu.com/p/31288654)
 - [Django Debug Toolbar在Docker中的使用](https://www.ctolib.com/topics-117992.html)
