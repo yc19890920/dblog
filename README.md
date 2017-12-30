@@ -6,7 +6,8 @@ Django 1.11 管理平台，博客, 页面缓存，celery，restful API，脚本�
 (Python >= 2.7)
 * Django==1.11.3
 
-Screenshots
+
+### Screenshots
 -----------
 * About —— 关于我
 ![about](doc/img/about.png)
@@ -27,9 +28,8 @@ Screenshots
 ![Login](doc/img/pic.png)
 
 
-
 ### 文档链接
-----
+-----------
 参考文档：
 - [Django 1.11.6 文档](http://python.usyiyi.cn/translate/Django_111/index.html)
 - [Django 设计模式与最佳实践](https://wizardforcel.gitbooks.io/django-design-patterns-and-best-practices/index.html)
