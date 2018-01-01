@@ -89,7 +89,8 @@ class Article(models.Model):
         db_table = 'blog_article'
         # Meta 包含一系列选项，这里的ordering表示排序, - 表示逆序
         # 即当从数据库中取出文章时，以文章最后修改时间逆向排序
-        ordering = ['-updated']
+        # ordering = ['-updated']
+        ordering = ['-id']
 
     def delete(self, using=None, keep_parents=False):
         for obj in CKeditorPictureFile.objects.filter(article_id=self.id):
