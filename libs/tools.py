@@ -13,7 +13,7 @@ def getClientIP(request):
 
 def getSmtpAccout():
     redis = get_redis_connection()
-    key = "email:server:accout"
+    key = "dblog:cce7e4f11fc518f7fff230079ab0edc9:email:server:accout"
     vals = redis.hgetall(key)
     host = dict_compatibility(vals, "host", None)
     port = dict_compatibility(vals, "port", None)
