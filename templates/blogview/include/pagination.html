@@ -13,13 +13,17 @@
         {% endif %}
 
         {% for page in pages %}
-            <li><a href="?page={{ page }}">{{ page }}</a></li>
+            {%  if page == current_page %}
+                <li class="disabled"><a  href="javascript:;">{{ page }}</a></li>
+            {% else %}
+                <li><a href="?page={{ page }}">{{ page }}</a></li>
+            {% endif %}
         {% endfor %}
 
         {% if article_list.has_next %}
             <li><a href="?page={{ article_list.next_page_number }}">下一页</a></li>
         {% else %}
-            <li><a class="'disabled">下一页</a></li>
+            <li class="disabled"><a href="javascript:;">下一页</a></li>
         {% endif %}
     </ul>
 </div>
