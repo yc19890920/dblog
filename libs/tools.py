@@ -36,6 +36,10 @@ def getSmtpAccout():
         p.execute()
     return host, int(port), int(is_ssl), account, password
 
+def getSystemRcp():
+    return Prefs.geValue("mail_recipient")
+
+
 def clearHtmlTags(html):
     text = BeautifulSoup(html).get_text()
     text = text.replace("\r", "").replace("\n", "").replace("  ", "")

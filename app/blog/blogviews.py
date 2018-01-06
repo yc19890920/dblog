@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 import re
 import json
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
@@ -13,13 +13,11 @@ from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.views.decorators.cache import cache_page
 from django.db.models import Q, F
 
-from django.shortcuts import get_object_or_404, redirect, get_list_or_404
-from libs.celery.tasks_blog import celery_send_email
-
 from app.blog.models import Tag, Category, Article, BlogComment, Suggest
 from app.blog.forms import SuggestForm, BlogCommentForm
 from app.blog import tools as cache
 from libs.tools import getClientIP
+from app.blog.tasks import celery_send_email
 
 import logging
 logger = logging.getLogger(__name__)
@@ -128,7 +126,7 @@ def about(request):
             form.save()
             try:
                 # 使用celery并发处理邮件发送的任务
-                celery_send_email.delay(u'访客意见', form.cleaned_data['content'], ['1793302800@qq.com'])
+                celery_send_email.delay(u'访客意见', form.cleaned_data['content'])
             except Exception as e:
                 logger.error(u"邮件发送失败: {}".format(e))
             messages.add_message(request, messages.SUCCESS, u'您宝贵的意见已收到，谢谢！')
