@@ -11,7 +11,7 @@ from django.utils.encoding import smart_str
 class Tag(models.Model):
     """ tag(标签云)对应的数据库
     """
-    name = models.CharField(u'标签名', max_length=20)
+    name = models.CharField(u'标签名', max_length=20, unique=True)
     created = models.DateTimeField(u'创建时间', auto_now_add=True)
     updated = models.DateTimeField(u'修改时间', auto_now=True)
 
@@ -27,7 +27,7 @@ class Category(models.Model):
     """ 另外一个表,储存文章的分类信息
     文章表的外键指向
     """
-    name = models.CharField(u'类名', max_length=20)
+    name = models.CharField(u'类名', max_length=20, unique=True)
     created = models.DateTimeField(u'创建时间', auto_now_add=True)
     updated = models.DateTimeField(u'修改时间', auto_now=True)
 
