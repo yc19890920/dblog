@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import, unicode_literals
-from celery import shared_task
+from celery import shared_task, platforms
 from django.core.mail import send_mail
 import logging
+
+platforms.C_FORCE_ROOT = True
 
 from libs.tools import getSmtpAccout, getSystemRcp
 from libs.email.send_email import MailSender
