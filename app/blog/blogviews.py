@@ -58,10 +58,10 @@ def detail(request, article_id):
     refer_list = Article.objects.filter(status='p', id__in=article.get_refer_ids).exclude(id=article_id)
     ip = getClientIP(request)
 
-    # views_article.delay(ip, article_id)
-    if cache.shouldIncrViews(ip, article_id):
-        article.views = F("views") +1
-        article.save()
+    views_article.delay(ip, article_id)
+    # if cache.shouldIncrViews(ip, article_id):
+    #     article.views = F("views") +1
+    #     article.save()
     return render(request, 'blogview/detail.html', {
         "form": form,
         "article": article,
