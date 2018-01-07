@@ -2,8 +2,8 @@
 from __future__ import absolute_import, unicode_literals
 
 ### ------增加gevent 设置------------ ###
-from gevent import monkey
-monkey.patch_all()
+# from gevent import monkey
+# monkey.patch_all()
 ### ------------------ ###
 
 import os
