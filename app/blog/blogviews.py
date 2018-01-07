@@ -17,7 +17,7 @@ from app.blog.models import Tag, Category, Article, BlogComment, Suggest
 from app.blog.forms import SuggestForm, BlogCommentForm
 from app.blog import tools as cache
 from libs.tools import getClientIP
-from app.blog.tasks import celery_send_email
+from app.blog.tasks import celery_send_email, views_article
 
 import logging
 logger = logging.getLogger(__name__)
@@ -57,9 +57,10 @@ def detail(request, article_id):
     # 相关文章
     refer_list = Article.objects.filter(status='p', id__in=article.get_refer_ids).exclude(id=article_id)
     ip = getClientIP(request)
-    if cache.shouldIncrViews(ip, article_id):
-        article.views = F("views") +1
-        article.save()
+    views_article.delay(ip, article_id)
+    # if cache.shouldIncrViews(ip, article_id):
+    #     article.views = F("views") +1
+    #     article.save()
     return render(request, 'blogview/detail.html', {
         "form": form,
         "article": article,

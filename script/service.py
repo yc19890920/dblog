@@ -39,7 +39,7 @@ MAIL_KEYS = [EMAIL_REGISTER_KEY, EMAIL_SYSTEM_KEY]
 
 ############################################################
 # 发送邮件
-def _send(j):
+def _sendEmail(j):
     receiver, subject, content = j["receiver"], j["subject"], j["content"]
     host, port, is_ssl, account, password = tools.getSmtpAccout()
     s = send_email.MailSender()
@@ -54,12 +54,12 @@ def _send(j):
             log.error(u'notice error, index: {}'.format(5-index))
             log.error(traceback.format_exc(), exc_info=1)
 
-def send():
+def sendEmail():
     while True:
         if signal_stop: break
         _, d = redis.brpop(MAIL_KEYS)
         try:
-            _send( json.loads(d) )
+            _sendEmail( json.loads(d) )
         except (DatabaseError, InterfaceError) as e:
             # 如果报数据库异常，关闭连接，重新处理任务
             redis.lpush(EMAIL_SYSTEM_KEY, d)
@@ -69,16 +69,16 @@ def send():
             log.error(traceback.format_exc())
 
 ############################################################
+def init():
+    pass
+
 def main():
     init()
     init_gevent_signal(signal_handle)
     gevent.joinall([
-        gevent.spawn(send),
-        gevent.spawn(send),
+        gevent.spawn(sendEmail),
+        gevent.spawn(sendEmail),
     ])
-
-def init():
-    pass
 
 ############################################################
 

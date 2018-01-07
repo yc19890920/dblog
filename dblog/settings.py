@@ -205,9 +205,11 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'
 
 #: Only add pickle to this list if your broker is secured
 #: from unwanted access (see userguide/security.html)
-CELERY_ACCEPT_CONTENT = ['json']
+CELERY_DEFAULT_QUEUE =  'dblog:celery' # 	默认队列
+CELERY_ACCEPT_CONTENT = ["json"]            # 指定任务接受的内容类型.
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_TASK_SERIALIZER = 'json'
+CELERY_TASK_RESULT_EXPIRES = 60 * 5 * 1   # 指定任务过期时间 1小时
 CELERY_ENABLE_UTC = True
 CELERY_TIMEZONE = TIME_ZONE
 

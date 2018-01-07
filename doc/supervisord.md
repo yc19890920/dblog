@@ -3,8 +3,9 @@
 sudo /usr/bin/python /usr/bin/supervisord -c  ~/git/dblog/doc/supervisord.conf
 sudo /usr/bin/python /usr/bin/supervisorctl -c  ~/git/dblog/doc/supervisord.conf
 
-/usr/bin/python /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
 
+sudo /usr/bin/python /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
+sudo /usr/bin/python /usr/bin/supervisorctl -c /etc/supervisor/supervisord.conf
 
 ### 开机启动 /etc/rc.local 加入如下代码
 /usr/bin/python /usr/bin/supervisord -c /etc/supervisor/supervisord.conf

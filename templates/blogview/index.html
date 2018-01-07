@@ -47,7 +47,7 @@
                         <article class="article-wrap">
 
                             <div class="article-head">
-                                <a href="{% url 'detail' d.id %}" title="{{ d.title }}"><h4>{{ d.title }}</h4></a>
+                                <a href="{% url 'detail' d.id %}" title="{{ d.title }}" target="_blank"><h4>{{ d.title }}</h4></a>
                                 <p>
                                     <small>标签：</small>
                                     <small>
@@ -65,7 +65,7 @@
                             <div class="article-foot">
                                 <p></p>
                                 <p class="text-right"><a><small>{{ d.auth|default_if_none:"" }}</small></a><small> 发布于 {{ d.created|date:"Y-m-d H:i" }}</small></p>
-                                <p class="text-right"><a href="{% url 'detail' d.id %}" title="{{ article.title }}">全文 » </a></p>
+                                <p class="text-right"><a href="{% url 'detail' d.id %}" title="{{ article.title }}" target="_blank">全文 » </a></p>
                             </div>
 
                         </article>

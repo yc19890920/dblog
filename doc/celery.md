@@ -1,4 +1,9 @@
-~/pyenv/versions/django-blog/bin/python manage.py  ~/pyenv/versions/django-blog/bin/celery  worker  -c  4  --loglevel=info
+## 异步队列任务
+~/pyenv/versions/django-blog/bin/python manage.py  celery  worker  -c  4  --loglevel=info
+
+## 定时任务队列
+/home/ubuntu/pyenv/versions/django-blog/bin/celery  -A  dblog  beat  --loglevel=info 
+
 
 ## 启动celery 命令
 用supervisor部署即可
@@ -6,7 +11,12 @@
 ~/git/dblog
 
 执行命令： 开启4个进程
-~/pyenv/versions/django-blog/bin/celery  -A  dblog  worker -c  4  --loglevel=info
+~/pyenv/versions/django-blog/bin/celery  -A  dblog  worker -c  20  --loglevel=info
+/home/ubuntu/pyenv/versions/django-blog/bin/celery  -A  dblog  worker -c  8  --loglevel=info
+
+加上gevent 
+~/pyenv/versions/django-blog/bin/celery  -A  dblog  worker -P gevent -c  20  --loglevel=info
+/home/ubuntu/pyenv/versions/django-blog/bin/celery  -A  dblog  worker -P gevent -c  20  --loglevel=info
 
 
 测试： 发表评论即可收到邮件了。

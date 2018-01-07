@@ -1,20 +1,30 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import, unicode_literals
-from celery import shared_task, platforms
-from django.core.mail import send_mail
-import logging
 
-platforms.C_FORCE_ROOT = True
+from celery import shared_task
+from django.core.mail import send_mail
+from django.db.models import F
+import logging
 
 from libs.tools import getSmtpAccout, getSystemRcp
 from libs.email.send_email import MailSender
+from app.blog import tools as cache
+from app.blog.models import Article
 
 logger = logging.getLogger(__name__)
 
 import time
 
-@shared_task
+@shared_task(ignore_result=True, store_errors_even_if_ignored=True)
+def views_article(ip, article_id):
+    if cache.shouldIncrViews(ip, article_id):
+        logger.info(u"article_id: {}".format(article_id))
+        Article.objects.filter(id=article_id).update(views=F('views') + 1)
+    return "success"
+
+
+@shared_task(ignore_result=True, store_errors_even_if_ignored=True)
 def celery_send_email(subject, message, **kwrags):
     host, port, is_ssl, account, password = getSmtpAccout()
     rcp = getSystemRcp()

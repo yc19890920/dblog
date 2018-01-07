@@ -49,7 +49,7 @@ class Article(models.Model):
     likes = models.PositiveIntegerField(u'点赞数', default=0)
     topped = models.BooleanField(u'置顶', default=False)
     auth = models.CharField(u"作者", max_length=50, null=False, blank=False)
-    source = models.CharField(u"来源", max_length=50, null=True, blank=True)
+    source = models.CharField(u"来源", max_length=200, null=True, blank=True)
     # 目录分类
     # on_delete 当指向的表被删除时，将该项设为空
     category = models.ForeignKey(Category, verbose_name=u'分类', null=True, on_delete=models.SET_NULL)
