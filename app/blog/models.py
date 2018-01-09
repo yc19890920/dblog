@@ -17,6 +17,7 @@ class Tag(models.Model):
 
     class Meta:
         db_table = 'blog_tag'
+        ordering = ['name']
 
     def __str__(self):
         return smart_str(self.name)
@@ -33,6 +34,7 @@ class Category(models.Model):
 
     class Meta:
         db_table = 'blog_category'
+        ordering = ['name']
 
     def __str__(self):
         return smart_str(self.name)
