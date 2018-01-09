@@ -191,7 +191,7 @@ def article_add(request):
 @login_required
 def article_modify(request, article_id):
     obj = Article.objects.get(pk=article_id)
-    form = ArticleForm(instance=obj)
+    form = ArticleForm(instance=obj, initial={"tags": obj.tags.all()})
     if request.method == "POST":
         form = ArticleForm(request.POST, instance=obj)
         if form.is_valid():

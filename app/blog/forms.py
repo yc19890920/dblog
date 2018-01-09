@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import re
 import json
 from django import forms
-from app.blog.models import Article, Suggest, BlogComment, CKeditorPictureFile
+from app.blog.models import Tag, Article, Suggest, BlogComment, CKeditorPictureFile
 from django.utils.translation import ugettext_lazy as _
 from libs.tools import clearHtmlTags
 
@@ -13,6 +13,21 @@ P = re.compile('^(\w|[-+=.])+@\w+([-.]\w+)*\.(\w+)$')
 PicP = re.compile(ur'src="(\/media\/ckupload\/.*?)"')
 
 class ArticleForm(forms.ModelForm):
+
+    tags = forms.ModelMultipleChoiceField(
+        label=_(u'标签'),
+        queryset=None,
+        # queryset=Tag.objects.all(),
+        required=True,
+        widget=forms.SelectMultiple(attrs={
+            "data-placeholder": _(u"请选择或输入查询"),
+            "autocomplete": "off",
+            "class": "select2 ",
+        }), help_text=_(u"可选多个标签"))
+
+    def __init__(self, *args, **kwargs):
+        super(ArticleForm, self).__init__(*args, **kwargs)
+        self.fields['tags'].queryset=Tag.objects.all()
 
     def clean_title(self):
         data = self.cleaned_data['title'].strip()

@@ -127,6 +127,10 @@ class Article(models.Model):
     def get_next_obj(self):
         return Article.objects.filter(id__gt=self.id).order_by("id").first()
 
+    @property
+    def tags_list(self):
+        return self.tags.values_list("id", "name")
+
     def __str__(self):
         return smart_str(self.title)
 
