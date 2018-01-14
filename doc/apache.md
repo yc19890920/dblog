@@ -1,3 +1,10 @@
+```
+ERROR: Module mod-wsgi does not exist!
+You will have to install mod wsgi as below. What you have to do is run the following commands,
+sudo apt-get install libapache2-mod-wsgi
+sudo a2enmod wsgi
+```
+
 ## apache2 配置
 
 1. 修改 静态目录 sudo chown ubuntu:www-data -R static/
