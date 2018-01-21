@@ -5,27 +5,23 @@ from __future__ import absolute_import, unicode_literals
 from datetime import timedelta
 from celery.schedules import crontab
 CELERYBEAT_SCHEDULE = {
-    # 'test_rabbit_running': {
-    #     "task": "retail.tasks.test_rabbit_running",
-    #     "schedule": 3600, #every hour
-    # }
+    # 'add-every-60-seconds': {
+    #     'task': 'app.core.tasks.test_celery',
+    #     'schedule': timedelta(minutes=1),
+    #     'args': (15, 15)
+    # },
 
-    'add-every-60-seconds': {
-        'task': 'app.core.tasks.test_celery',
-        # 'schedule': crontab(minute=u'40', hour=u'17',),
-        'schedule': timedelta(minutes=1),
-        'args': (15, 15)
-    },
-
-    'add-every-5-minuters': {
+    'add-every-15-minuters': {
         'task': 'app.core.tasks.test_user',
-        'schedule': timedelta(minutes=5),
+        'schedule': timedelta(minutes=15),
         # 'args': ()
     },
 
     'timing': {
         'task': 'app.core.tasks.test_multiply',
         'schedule': crontab(minute=u'15', hour=u'16',),
+        # 'schedule': crontab(minute=u'40', hour=u'17',),
+        # "schedule": 3600, #every hour
         # 'schedule': timedelta(seconds=3),
         'args': (2, 3)
     },
