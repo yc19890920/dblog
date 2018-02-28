@@ -27,7 +27,7 @@ SECRET_KEY = ')ld$-iyr13g_0%rw_^gi+$6y&-52!gj7zhh=%=(b8^#6b!vzc0'
 # DEBUG = True
 DEBUG = False
 
-ALLOWED_HOSTS = ["0.0.0.0", "192.168.181.129", "192.168.1.24", "djangoblog.com"]
+ALLOWED_HOSTS = ["0.0.0.0", "192.168.181.129", "192.168.1.24", "djangoblog.com", "gundjangoblog.com"]
 
 
 # Application definition
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'debug_toolbar',
+    # 'debug_toolbar',
 
     "rest_framework",
     'bootstrapform',
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'app.setting',
     'app.blog',
     'app.rest',
+    'gunicorn'
 ]
 
 # debug_toolbar
