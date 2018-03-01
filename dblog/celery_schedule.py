@@ -17,14 +17,14 @@ CELERYBEAT_SCHEDULE = {
         # 'args': ()
     },
 
-    'timing': {
-        'task': 'app.core.tasks.test_multiply',
-        'schedule': crontab(minute=u'15', hour=u'16',),
-        # 'schedule': crontab(minute=u'40', hour=u'17',),
-        # "schedule": 3600, #every hour
-        # 'schedule': timedelta(seconds=3),
-        'args': (2, 3)
-    },
+    # 'timing': {
+    #     'task': 'app.core.tasks.test_multiply',
+    #     'schedule': crontab(minute=u'15', hour=u'16',),
+    #     # 'schedule': crontab(minute=u'40', hour=u'17',),
+    #     # "schedule": 3600, #every hour
+    #     # 'schedule': timedelta(seconds=3),
+    #     'args': (2, 3)
+    # },
 
 
 
