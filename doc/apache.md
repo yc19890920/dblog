@@ -41,6 +41,7 @@ http { ...  charset  utf-8; .. }
 WSGIPassAuthorization On
 <VirtualHost *:8080>
 ServerName djangoblog.com
+ServerAlias www.djangoblog.com
 WSGIProcessGroup djangoblog.com
 
 WSGIDaemonProcess djangoblog.com python-path=/home/python/git/dblog:/home/python/pyenv/versions/django-blog/lib/python2.7/site-packages

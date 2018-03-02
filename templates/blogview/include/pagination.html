@@ -1,13 +1,13 @@
 <div class="pagination pagination-centered">
     <ul>
         {% if article_list.has_previous or article_list.has_next %}
-            <li><a href="?page=1">首页</a></li>
+            <li><a href="{% url 'index' %}?page=1">首页</a></li>
         {% else %}
             <li class="disabled"><a href="javascript:;">首页</a></li>
         {% endif %}
 
         {% if article_list.has_previous %}
-            <li><a href="?page={{ article_list.previous_page_number }}">上一页</a></li>
+            <li><a href="{% url 'index' %}?page={{ article_list.previous_page_number }}">上一页</a></li>
         {% else %}
             <li class="disabled"><a href="javascript:;">上一页</a></li>
         {% endif %}
@@ -16,12 +16,12 @@
             {%  if page == current_page %}
                 <li class="disabled"><a  href="javascript:;">{{ page }}</a></li>
             {% else %}
-                <li><a href="?page={{ page }}">{{ page }}</a></li>
+                <li><a href="{% url 'index' %}?page={{ page }}">{{ page }}</a></li>
             {% endif %}
         {% endfor %}
 
         {% if article_list.has_next %}
-            <li><a href="?page={{ article_list.next_page_number }}">下一页</a></li>
+            <li><a href="{% url 'index' %}?page={{ article_list.next_page_number }}">下一页</a></li>
         {% else %}
             <li class="disabled"><a href="javascript:;">下一页</a></li>
         {% endif %}
