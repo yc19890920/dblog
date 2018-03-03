@@ -1,0 +1,15 @@
+
+dblog:123456
+root:dblog
+
+/usr/local/pyenv/versions/dblog/bin/python
+
+/usr/local/pyenv/versions/dblog/bin/supervisord -c /usr/local/yangcheng/dblog/supervisord.conf 
+/usr/local/pyenv/versions/dblog/bin/supervisorctl -c /usr/local/yangcheng/dblog/supervisord.conf 
+
+
+/usr/local/pyenv/versions/dblog/bin/celery 
+/usr/local/pyenv/versions/dblog/bin/gunicorn 
+
+
+
