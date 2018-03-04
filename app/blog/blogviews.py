@@ -31,6 +31,7 @@ def index(request):
     newcom_list = cache.getNewCommontlist()
     return render(request, 'blogview/index.html', {
         "article_list": article_list,
+        "article_index_limit": True,
 
         "tag_list": tag_list,
         "hot_list": hot_list,

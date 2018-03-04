@@ -42,7 +42,9 @@
             <div>
 
                 <div class="article-list">
-                    {% paginate article_list 3 %}
+                    {% if article_index_limit %}
+                        {% paginate article_list 5 %}
+                    {% endif %}
                     {% for d in article_list %}
                         <article class="article-wrap">
 
@@ -73,8 +75,9 @@
                 </div>
 
                 <!-- 分页 -->
-                {% include 'blogview/include/pagination.html' %}
-
+                {% if article_index_limit %}
+                    {% include 'blogview/include/pagination.html' %}
+                {% endif %}
             </div>
 
         </div>
