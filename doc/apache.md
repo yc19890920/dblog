@@ -51,6 +51,7 @@ CustomLog "/home/python/log/djangoblog" common
 
 DocumentRoot "/home/python/git/dblog"
 
+Alias /robots.txt /usr/local/yangcheng/dblog/static/robots.txt
 # 存放用户上传图片等文件的位置，注意去掉#号
 Alias /media/ /home/python/git/dblog/media/
 # 静态文件(js/css/images)的存放位置
