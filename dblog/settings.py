@@ -29,7 +29,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["0.0.0.0", "192.168.181.129", "192.168.1.24", "djangoblog.com", "gundjangoblog.com", "ychzp.top", 'www.ychzp.top']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,7 +47,8 @@ INSTALLED_APPS = [
     'app.setting',
     'app.blog',
     'app.rest',
-    'gunicorn'
+    'gunicorn',
+    'django_logtail',
 ]
 
 # debug_toolbar
@@ -89,6 +89,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'dblog.wsgi.application'
 
 
@@ -117,6 +118,7 @@ CACHES = {
         }
     }
 }
+
 
 # ---------------------------
 # restful

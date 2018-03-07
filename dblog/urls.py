@@ -7,7 +7,7 @@ from app.blog.blogurls import urlpatterns as blog_urls
 from django.conf import settings
 
 urlpatterns = [
-
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^core/', include('app.core.urls')),
     url(r'^core/set/', include('app.setting.urls')),
     url(r'^core/blog/', include('app.blog.urls')),

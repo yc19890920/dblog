@@ -148,6 +148,22 @@
                     </ul>
                 </li>
 
+
+                <li class="" id="nav_log">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-list"></i>
+                        <span class="menu-text"> 日志 </span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <b class="arrow"></b>
+                    <ul class="submenu">
+                        <li class="">
+                            <a href="{% url 'admin:django_logtail_log_changelist' %}"><i class="menu-icon fa fa-caret-right"></i> 日志 </a><b class="arrow"></b>
+                        </li>
+
+                    </ul>
+                </li>
+
                 <li class="" id="nav_rest">
                     <a href="#" class="dropdown-toggle">
                         <i class="menu-icon fa fa-list"></i>
@@ -275,7 +291,7 @@
             } else if ( path.indexOf('/core/blog/')==0 ){
                 $('#nav_blog').addClass('active open');
             } else {
-                $('#nav_blog').addClass('active open');
+                $('#nav_log').addClass('active open');
             };
             $('#sidebar').find("[href^='"+path+"']").parent().first().addClass('active');
         });
