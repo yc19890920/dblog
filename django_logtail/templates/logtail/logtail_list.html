@@ -36,8 +36,8 @@
         </div>
     </div>
     <ul class="object-tools">
-        <li><a href="#" id="auto-scroll-toggle" class="historylink">Turn Auto-Scroll On</a></li>
-        <li><a href="#" id="auto-poll-toggle" class="historylink">Turn Auto-Poll Off</a></li>
+        <li><a href="#" id="auto-scroll-toggle" class="historylink">打开自动滚动</a></li>
+        <li><a href="#" id="auto-poll-toggle" class="historylink">关闭自动轮询</a></li>
     </ul>
 {% endblock %}
 
@@ -68,18 +68,18 @@
             if(log){
                 window.tailer.poll(log);
                 window.tailer.autoScroll = true;
-                $('#auto-scroll-toggle').text('Turn Auto-Scroll Off');
+                $('#auto-scroll-toggle').text('关闭自动滚动');
             };
 
             $('#auto-scroll-toggle').on('click', function(e) {
                 e.preventDefault();
                 if (window.tailer.autoScroll) {
                     window.tailer.autoScroll = false;
-                    $(this).text('Turn Auto-Scroll On');
+                    $(this).text('打开自动滚动');
                 }
                 else {
                     window.tailer.autoScroll = true;
-                    $(this).text('Turn Auto-Scroll Off');
+                    $(this).text('关闭自动滚动');
                 }
             });
 
@@ -87,11 +87,11 @@
                 e.preventDefault();
                 if (window.tailer.autoPoll) {
                     window.tailer.autoPoll = false;
-                    $(this).text('Turn Auto-Poll On');
+                    $(this).text('打开自动轮询');
                 }
                 else {
                     window.tailer.autoPoll = true;
-                    $(this).text('Turn Auto-Poll Off');
+                    $(this).text('关闭自动轮询');
                 }
             });
         })(django.jQuery);
