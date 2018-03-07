@@ -23,7 +23,7 @@
                 {% for log, path in logfiles %}
                     <tr>
                         <!--<th scope="row"><a href="#" class="logfile_change">{{ log }}</a></th>-->
-                        <th scope="row"><a href="{% url 'admin:django_logtail_log_changelist' %}?log={{ log }}" class="logfile_change" target="_blank">{{ log }}</a></th>
+                        <th scope="row"><a href="{% url 'admin:django_logtail_log_changelist' %}?log={{ log }}" class="logfile_change">{{ log }}</a></th>
                         <td>{{ path }}</td>
                     </tr>
                 {% endfor %}
