@@ -64,6 +64,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+     # 'middleware.login.MyLoginMiddleware',
 ]
 
 ROOT_URLCONF = 'dblog.urls'

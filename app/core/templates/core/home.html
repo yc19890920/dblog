@@ -46,16 +46,10 @@
 {% endblock %}
 
 {% block css_block %}
-    <script src="{% static 'admin/components/datatables/media/css/dataTables.bootstrap.min.css' %}"></script>
-    <script src="{% static 'admin/components/datatables/media/css/jquery.dataTables.min.css' %}"></script>
+    <link href="{% static 'admin/components/datatables/media/css/dataTables.bootstrap.css' %}">
 {% endblock %}
 
 {% block my_jsblock %}
-    <script src="{% static 'admin/components/Flot/jquery.flot.js' %}"></script>
-    <script src="{% static 'admin/components/Flot/jquery.flot.pie.js' %}"></script>
-    <script src="{% static 'admin/components/Flot/jquery.flot.resize.js' %}"></script>
-    <script src="{% static 'admin/components/datatables/media/js/dataTables.bootstrap.min.js' %}"></script>
-    <script src="{% static 'admin/components/datatables/media/js/jquery.dataTables.min.js' %}"></script>
-
-    <script></script>
+    <script src="{% static 'admin/components/datatables/media/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'admin/components/_mod/datatables/jquery.dataTables.bootstrap.js' %}"></script>
 {% endblock %}
