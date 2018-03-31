@@ -5,12 +5,20 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 register = template.Library()
 # 这是定义模板标签要用到的
 
+
 @register.simple_tag(takes_context=True)
 def paginate(context, object_list, page_count):
     # context是Context 对象，object_list是你要分页的对象，page_count表示每页的数量
     left = 3
     right = 3
     # 获取分页对象
+    # 父类生成的字典中已有 paginator、page_obj、is_paginated 这三个模板变量，
+    # paginator 是 Paginator 的一个实例，
+    # page_obj 是 Page 的一个实例，
+    # is_paginated 是一个布尔变量，用于指示是否已分页。
+    # 例如如果规定每页 10 个数据，而本身只有 5 个数据，其实就用不着分页，此时 is_paginated=False。
+    # 关于什么是 Paginator，Page 类在 Django Pagination 简单分页：http://zmrenwu.com/post/34/ 中已有详细说明。
+    # 由于 context 是一个字典，所以调用 get 方法从中取出某个键对应的值。
     paginator = Paginator(object_list, page_count)
     # 从请求中获取页码号
     page = context['request'].GET.get('page')
