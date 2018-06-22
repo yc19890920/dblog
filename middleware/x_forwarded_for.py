@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 高流量的站点通常需要将Django部署在负载平衡proxy之后。
 这种方式将带来一些复杂性，其一就是每个request中的远程IP地址(request.META["REMOTE_IP"])将指向该负载平衡proxy，而不是发起这个request的实际IP。
@@ -12,27 +13,6 @@
 from django.utils.deprecation import MiddlewareMixin
 
 class XForwardedForMiddleware(MiddlewareMixin):
-
     def process_request(self, request):
         if 'HTTP_X_FORWARDED_FOR' in request.META:
             request.META['REMOTE_ADDR'] = request.META['HTTP_X_FORWARDED_FOR'].split(",")[0].strip()
-        # try:
-        #     real_ip = request.META['HTTP_X_FORWARDED_FOR']
-        # except KeyError:
-        #     pass
-        #     # real_ip = request.META.get('REMOTE_ADDR')
-        # else:
-        #     # HTTP_X_FORWARDED_FOR can be a comma-separated list of IPs.
-        #     # Take just the first one.
-        #     real_ip = real_ip.split(",")[0]
-        #     request.META['REMOTE_ADDR'] = real_ip
-
-
-class CheckSourceMiddle(MiddlewareMixin):
-    def process_request(self, request):
-        from_source = request.META['HTTP_USER_AGENT']
-        print('from_source', from_source)
-        if 'iphone' in from_source:
-            request.session['from_source'] = 'iphone'
-        else:
-            request.session['from_source'] = 'PC'

@@ -17,44 +17,123 @@ from django.db.models import query
 from django.conf import settings
 from django.utils.encoding import smart_str
 from app.blog.models import Tag, Category, Article, BlogComment, Suggest, CKeditorPictureFile
-from app.blog.forms import ArticleForm
+from app.blog.forms import ArticleForm, TagForm, CategoryForm, ShowForm, AdminLogForm
+from django.utils.translation import ugettext_lazy as _
+from auditlog.models import LogEntry
+
+
+#########################################
+# 管理员操作日志
+@login_required
+def admin_log(request):
+    form = AdminLogForm(request.GET)
+    return render(request, "blog/admin_log.html", context={
+        "form": form,
+    })
+
+@login_required
+def admin_log_ajax(request):
+    data = request.GET
+    order_column = data.get('order[0][column]', '')
+    order_dir = data.get('order[0][dir]', '')
+    search = data.get('search[value]', '')
+    start_time = data.get('start_time', '')
+    end_time = data.get('end_time', '')
+    content_type = data.get('content_type', '')
+    domain_id = data.get('domain', '')
+    logs = LogEntry.objects.all()
+    if content_type:
+        try:
+            content_type_id = int(content_type)
+            logs = logs.filter(content_type_id=content_type_id)
+        except BaseException as e:
+            logs = logs.filter(extend_type=content_type)
+
+    if start_time:
+        logs = logs.filter(timestamp__gte=start_time)
+    if end_time:
+        logs = logs.filter(timestamp__lte=start_time)
+    if search:
+        logs = logs.filter(remote_addr__icontains=search)
+        # Q(remote_addr__icontains=search) | Q(changes__icontains=search) )
+
+    colums = ['id', 'content_type', 'changes', 'action', 'actor', 'remote_addr', 'timestamp']
+    if logs.exists() and order_column and int(order_column) < len(colums):
+        col_name = colums[int(order_column)]
+        if order_dir == 'desc':
+            logs = logs.order_by('-%s' % col_name)
+        else:
+            logs = logs.order_by('%s' % col_name)
+
+    try:
+        length = int(data.get('length', 1))
+    except ValueError:
+        length = 1
+
+    try:
+        page = int(data.get('start', '0')) / length + 1
+    except ValueError:
+        page = 1
+
+    count = len(logs)
+
+    paginator = Paginator(logs, length)
+
+    try:
+        logs = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        logs = paginator.page(paginator.num_pages)
+
+    rs = {"sEcho": 0, "iTotalRecords": count, "iTotalDisplayRecords": count, "aaData": []}
+    re_str = '<td.*?>(.*?)</td>'
+    for d in logs.object_list:
+        t = TemplateResponse(request, 'blog/admin_log_ajax.html', {'d': d})
+        t.render()
+        rs["aaData"].append(re.findall(re_str, t.content, re.DOTALL))
+    return HttpResponse(json.dumps(rs), content_type="application/json")
 
 ############################################################
 @login_required
 def tag(request):
+    form = ShowForm()
     if request.method == "POST":
-        return add_tag(request, Tag, "admin_tag")
+        return add_tag(request, Tag, TagForm, "admin_tag")
     return render(request, template_name="blog/tag.html", context={
         "model": "tag",
         "model_name": u"标签",
+        "form": form,
     })
 
 @login_required
 def category(request):
+    form = ShowForm()
     if request.method == "POST":
-        return add_tag(request, Category, "admin_category")
+        return add_tag(request, Category, CategoryForm, "admin_category")
     return render(request, template_name="blog/tag.html", context={
         "model": "category",
         "model_name": u"分类",
+        "form": form,
     })
 
-def add_tag(request, model, reverse_name):
-    id = request.POST.get('id', "")
-    name = request.POST.get('name', "").strip()
+def add_tag(request, model, form, reverse_name):
     status = request.POST.get('status', "")
     if status == "delete":
+        id = request.POST.get('id', "")
         obj = model.objects.filter(pk=id).first()
         obj.delete()
         messages.add_message(request, messages.SUCCESS, u'删除成功')
     if status == "add":
-        if not name:
-            messages.add_message(request, messages.ERROR, u'输入为空，操作失败')
-            return HttpResponseRedirect(reverse(reverse_name))
-        if model.objects.filter(name=name).exists():
-            messages.add_message(request, messages.ERROR, u'重复添加，添加失败')
-        else:
-            model.objects.create(name=name)
+        name = request.POST.get('name', "")
+        f = form({'name': name})
+        if f.is_valid():
+            f.save()
             messages.add_message(request, messages.SUCCESS, u'添加成功')
+        else:
+            if f['name'].errors:
+                msg = f['name'].errors.data[0].message % {}
+            else:
+                msg = _(u"未知错误，请重试。") % {}
+            messages.add_message(request, messages.ERROR, msg)
     return HttpResponseRedirect(reverse(reverse_name))
 
 @login_required

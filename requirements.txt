@@ -28,3 +28,5 @@ six==1.11.0
 sqlparse==0.2.4
 supervisor==3.3.3
 vine==1.1.4
+jsonfield==2.0.2
+python-dateutil==2.7.3

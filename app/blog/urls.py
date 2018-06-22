@@ -21,4 +21,7 @@ urlpatterns = [
     url(r'^comment/ajax$', views.ajax_comment, name='admin_comment_ajax'),
     url(r'^suggest$', views.suggest, name='admin_suggest'),
     url(r'^suggest/ajax$', views.ajax_suggest, name='admin_suggest_ajax'),
+
+    url(r'^log$', views.admin_log, name='admin_log'),
+    url(r'^log/ajax$', views.admin_log_ajax, name='admin_log_ajax'),
 ]

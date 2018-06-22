@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from app.blog.choices import STATUS_CHOICES
 from django.utils.encoding import smart_str
+from django.utils.translation import ugettext_lazy as _
 
 class Tag(models.Model):
     """ tag(标签云)对应的数据库
@@ -18,6 +19,7 @@ class Tag(models.Model):
     class Meta:
         db_table = 'blog_tag'
         ordering = ['name']
+        verbose_name = _(u'标签')
 
     def __str__(self):
         return smart_str(self.name)
@@ -35,6 +37,7 @@ class Category(models.Model):
     class Meta:
         db_table = 'blog_category'
         ordering = ['name']
+        verbose_name = _(u'分类')
 
     def __str__(self):
         return smart_str(self.name)
@@ -204,3 +207,7 @@ class Suggest(models.Model):
 
     def __str__(self):
         return smart_str(self.content)
+
+from auditlog.registry import auditlog
+auditlog.register(Tag, include_fields=['name', 'created', 'updated'])
+auditlog.register(Category, include_fields=['name', 'created', 'updated'])
