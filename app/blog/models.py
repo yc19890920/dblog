@@ -96,6 +96,7 @@ class Article(models.Model):
         # 即当从数据库中取出文章时，以文章最后修改时间逆向排序
         # ordering = ['-updated']
         ordering = ['-id']
+        verbose_name = _(u'文章')
 
     def delete(self, using=None, keep_parents=False):
         for obj in CKeditorPictureFile.objects.filter(article_id=self.id):
@@ -211,3 +212,4 @@ class Suggest(models.Model):
 from auditlog.registry import auditlog
 auditlog.register(Tag, include_fields=['name', 'created', 'updated'])
 auditlog.register(Category, include_fields=['name', 'created', 'updated'])
+auditlog.register(Article, include_fields=['title', 'status', 'auth', 'category', 'tags', 'created', 'updated'])
