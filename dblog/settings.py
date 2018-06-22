@@ -24,8 +24,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')ld$-iyr13g_0%rw_^gi+$6y&-52!gj7zhh=%=(b8^#6b!vzc0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
+# DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["0.0.0.0", "192.168.181.130", "192.168.181.131", "192.168.1.24", "djangoblog.com", "gundjangoblog.com", "ychzp.top", 'www.ychzp.top']
 
