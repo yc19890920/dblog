@@ -18,3 +18,4 @@ mysqldump -u dblog -P 3306 -p dblog > /usr/local/yangcheng/dblog/doc/data.sql
 
 数据还原
 mysql -u root -p dblog < /usr/local/yangcheng/dblog/doc/data.sql
+
