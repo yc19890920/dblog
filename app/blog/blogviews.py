@@ -18,10 +18,12 @@ from app.blog.forms import SuggestForm, BlogCommentForm
 from app.blog import tools as cache
 from libs.tools import getClientIP
 from app.blog.tasks import celery_send_email, views_article
+from django.views.decorators.cache import cache_page
 
 import logging
 logger = logging.getLogger(__name__)
 
+@cache_page(1800, key_prefix="dblog:pages:index")
 def index(request):
     article_list = Article.objects.filter(status='p')
 
@@ -31,7 +33,6 @@ def index(request):
     newcom_list = cache.getNewCommontlist()
     return render(request, 'blogview/index.html', {
         "article_list": article_list,
-        "article_index_limit": True,
 
         "tag_list": tag_list,
         "hot_list": hot_list,
@@ -81,6 +82,7 @@ def score(request):
         obj.save()
     return HttpResponse(json.dumps({'status': "ok"}), content_type="application/json")
 
+@cache_page(1800, key_prefix="dblog:pages:tag")
 def tag(request, tag_id):
     tag_obj = get_object_or_404(Tag, pk=tag_id)
     article_list = Article.objects.filter(tags=tag_id, status='p')
@@ -92,6 +94,7 @@ def tag(request, tag_id):
     return render(request, 'blogview/index.html', {
         "tag_name": tag_obj,
         "article_list": article_list,
+        "article_index_limit_tag": True,
 
         "tag_list": tag_list,
         "hot_list": hot_list,

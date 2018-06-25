@@ -25,13 +25,15 @@ def paginate(context, object_list, page_count):
 
     try:
         object_list = paginator.page(page) # 根据页码号获取数据页码对象
-        context['current_page'] = int(page) # 将当前页码号封装进context中
+        # context['current_page'] = int(page) # 将当前页码号封装进context中
+        current_page = int(page)
         # 获取页码列表
         pages = paginator.page_range
 
     except PageNotAnInteger:
         object_list = paginator.page(1) # 获取首页数据页码对象
-        context['current_page'] = 1
+        current_page = 1
+        # context['current_page'] = 1
         pages = paginator.page_range
 
     except EmptyPage:
@@ -40,10 +42,16 @@ def paginate(context, object_list, page_count):
         # num_pages为总分页数
         context['currten_page'] = paginator.num_pages
         pages = paginator.page_range
+    # 获得分页后的总页数
+    num_pages = paginator.num_pages
 
+    # 将 pages 修改为省略号（0代表省略）
+    pages = get_pages(pages, current_page, num_pages)
+
+    context['current_page'] = current_page
     context['article_list'] = object_list
     context['pages'] = pages  # 页码列表
-    context['last_page'] = paginator.num_pages
+    context['last_page'] = num_pages
     context['first_page'] = 1
     # 用于判断是否加入省略号
     try:
@@ -52,32 +60,71 @@ def paginate(context, object_list, page_count):
     except IndexError:
         context['page_first'] = 1
         context['page_last'] = 2
-
     return ''
 
-#
-# def get_left(current_page, left, num_pages):
-#     """
-#     辅助函数，获取当前页码的值得左边两个页码值，要注意一些细节，比如不够两个那么最左取到2
-#     ，为了方便处理，包含当前页码值，比如当前页码值为5，那么pages = [3,4,5]
-#     """
-#     if current_page == 1:
-#         return []
-#     elif current_page == num_pages:
-#         l = [i - 1 for i in range(current_page, current_page - left, -1) if i - 1 > 1]
-#         l.sort()
-#         return l
-#     l = [i for i in range(current_page, current_page - left, -1) if i > 1]
-#     l.sort()
-#     return l
-#
-#
-# def get_right(current_page, right, num_pages):
-#     """
-#     辅助函数，获取当前页码的值得右边两个页码值，要注意一些细节，
-#     比如不够两个那么最右取到最大页码值。不包含当前页码值。比如当前页码值为5，那么pages = [6,7]
-#     """
-#     if current_page == num_pages:
-#         return []
-#     return [i + 1 for i in range(current_page, current_page + right - 1) if i < num_pages - 1]
+def get_pages(page_xrange, current_page, page_all):
+    """get the paginator"""
+    page_range = []
+    mid_pages = 3  # 中间段显示的页码数
+
+    # 获取优化显示的页码列表
+    if page_all <= 2 + mid_pages:
+        # 页码数少于6页就无需分析哪些地方需要隐藏
+        page_range = list(page_xrange)
+    else:
+        # 添加应该显示的页码
+        page_range += [1, page_all]
+        page_range += [current_page - 1, current_page, current_page + 1, current_page + 2]
+        if current_page - 2 >0:
+            page_range.insert(0, current_page - 2)
+
+        # 若当前页是头尾，范围拓展多1页
+        if current_page == 1 or current_page == page_all:
+            page_range += [current_page + 2, current_page - 2]
+
+        # 去掉超出范围的页码
+        page_range = filter(lambda x: x >= 1 and x <= page_all, page_range)
+
+        # 排序去重
+        page_range = sorted(list(set(page_range)))
+
+        # 查漏补缺
+        # 从第2个开始遍历，查看页码间隔，若间隔为0则是连续的
+        # 若间隔为1则补上页码；间隔超过1，则补上省略号
+        t = 1
+        for i in range(len(page_range) - 1):
+            step = page_range[t] - page_range[t - 1]
+            if step >= 2:
+                if step == 2:
+                    page_range.insert(t, page_range[t] - 1)
+                else:
+                    page_range.insert(t, 0)
+                t += 1
+            t += 1
+    return page_range
+
+def get_left(current_page, left, num_pages):
+    """
+    辅助函数，获取当前页码的值得左边两个页码值，要注意一些细节，比如不够两个那么最左取到2
+    ，为了方便处理，包含当前页码值，比如当前页码值为5，那么pages = [3,4,5]
+    """
+    if current_page == 1:
+        return []
+    elif current_page == num_pages:
+        l = [i - 1 for i in range(current_page, current_page - left, -1) if i - 1 > 1]
+        l.sort()
+        return l
+    l = [i for i in range(current_page, current_page - left, -1) if i > 1]
+    l.sort()
+    return l
+
+
+def get_right(current_page, right, num_pages):
+    """
+    辅助函数，获取当前页码的值得右边两个页码值，要注意一些细节，
+    比如不够两个那么最右取到最大页码值。不包含当前页码值。比如当前页码值为5，那么pages = [6,7]
+    """
+    if current_page == num_pages:
+        return []
+    return [i + 1 for i in range(current_page, current_page + right - 1) if i < num_pages - 1]
 
