@@ -23,7 +23,7 @@ from django.views.decorators.cache import cache_page
 import logging
 logger = logging.getLogger(__name__)
 
-@cache_page(1800, key_prefix="dblog:pages:index")
+# @cache_page(1800, key_prefix="dblog:pages:index")
 def index(request):
     article_list = Article.objects.filter(status='p')
 
@@ -82,7 +82,7 @@ def score(request):
         obj.save()
     return HttpResponse(json.dumps({'status': "ok"}), content_type="application/json")
 
-@cache_page(1800, key_prefix="dblog:pages:tag")
+# @cache_page(1800, key_prefix="dblog:pages:tag")
 def tag(request, tag_id):
     tag_obj = get_object_or_404(Tag, pk=tag_id)
     article_list = Article.objects.filter(tags=tag_id, status='p')
