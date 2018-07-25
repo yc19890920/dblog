@@ -232,7 +232,7 @@ def _get_tcp_connect_info(redis, key, bn="now"):
 # 监控网卡流量
 @shared_task(bind=False)
 def network_monitor_info():
-    key_info, net_in, net_out = network.get_rate(network.get_key)
+    key_info, net_in, net_out = network.get_nets_io_rate(network.get_nets())
     # time_fmt = time.strftime("%Y-%m-%d %H:%M")
     now = datetime.datetime.now()
     bnow_fmt = (now - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
@@ -288,7 +288,7 @@ def set_network_monitor_info(redis, nstat_net, net, bnow_fmt, bbnow_fmt):
     }))
 
 def get_network_monitor_info():
-    key_info = network.get_key_info()  # 获取网卡名称
+    key_info = network.get_nets()  # 获取网卡名称
     j = []
     keys = []
     redis = get_redis_connection()
@@ -321,14 +321,13 @@ def _get_network_monitor_info(redis, net):
     _unit, _unit_str, _unit_round = KB, 'KB/s', 1
     if yaxismaxValue>=MB:
         _unit, _unit_str, _unit_round  = MB, 'MB/s', 2
-    # yaxisminValue = network.trans(d["yaxisminValue"], _unit, _unit_round)
     yaxisminValue = 0
-    yaxismaxValue = network.trans(d["yaxismaxValue"], _unit, _unit_round)
+    yaxismaxValue = network.trans_io(d["yaxismaxValue"], _unit, _unit_round)
     category = "|".join(categories[index:])
     _in_key = 'Incoming network traffic on {}'.format(net)
     _out_key = 'Outgoing network traffic on {}'.format(net)
-    _ins = [network.trans(i, _unit, _unit_round) for i in datasets[_in_key][index:]]
-    _outs = [network.trans(i, _unit, _unit_round) for i in datasets[_out_key][index:]]
+    _ins = [network.trans_io(i, _unit, _unit_round) for i in datasets[_in_key][index:]]
+    _outs = [network.trans_io(i, _unit, _unit_round) for i in datasets[_out_key][index:]]
     dataset = [{
         "seriesname": _in_key,
         "data": "|".join(map(str, _ins))
