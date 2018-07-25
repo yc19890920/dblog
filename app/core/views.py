@@ -14,10 +14,18 @@ from django.views.decorators.cache import never_cache
 from django.http import HttpResponseRedirect, QueryDict
 # from django.template.response import TemplateResponse
 # from django.utils.translation import ugettext as _
+from .tasks import get_tcp_connect_info, get_network_monitor_info
 
 @login_required
 def home(request, template_name='core/home.html'):
-    return render(request, template_name, context={})
+    ntcp_info_json, bntcp_info_json = get_tcp_connect_info()
+    network_monitor_keys, network_monitor_infos = get_network_monitor_info()
+    return render(request, template_name, context={
+        "ntcp_info_json": ntcp_info_json,
+        "bntcp_info_json": bntcp_info_json,
+        "network_monitor_infos": network_monitor_infos,
+        "network_monitor_keys": network_monitor_keys,
+    })
 
 from django.contrib.auth import (
     REDIRECT_FIELD_NAME, get_user_model, login as auth_login,
