@@ -38,7 +38,7 @@ def trans_io(num, unit=1024, places=2):
     return round( float(num) / float(unit), places )
 
 if __name__ == "__main__":
-    key_info, net_in, net_out = get_nets_io_rate(get_key)
+    key_info, net_in, net_out = get_nets_io_rate(get_nets_io)
     # print('-----------------------', key_info, net_in, net_out)
     # ['vethed8bd96', 'veth07d0c4d', 'docker0', 'veth22fa1dd', 'veth1e14688', 'ens160', 'veth03abfca', 'vethaf7fd5b',
     #  'veth63f726b', 'lo', 'veth88bc1b4', 'br-ed615a0f409e']
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     #  'br-ed615a0f409e': 0.0}
     # while 1:
     #     try:
-    #         key_info, net_in, net_out = get_rate(get_key)
+    #         key_info, net_in, net_out = get_nets_io_rate(get_nets_io)
     #
     #         for key in key_info:
     #             print('%s\nInput:\t %-5sKB/s\nOutput:\t %-5sKB/s\n' % (key, net_in.get(key), net_out.get(key)))

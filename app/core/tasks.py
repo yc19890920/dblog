@@ -232,7 +232,7 @@ def _get_tcp_connect_info(redis, key, bn="now"):
 # 监控网卡流量
 @shared_task(bind=False)
 def network_monitor_info():
-    key_info, net_in, net_out = network.get_nets_io_rate(network.get_nets_io())
+    key_info, net_in, net_out = network.get_nets_io_rate(network.get_nets_io)
     # time_fmt = time.strftime("%Y-%m-%d %H:%M")
     now = datetime.datetime.now()
     bnow_fmt = (now - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
