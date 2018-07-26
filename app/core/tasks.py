@@ -261,9 +261,9 @@ def set_network_monitor_info(redis, nstat_net, net, bnow_fmt, bbnow_fmt):
     bbstat_net = reversed(redis.lrange(bbkey, 0, -1))
     key = DJANGO_CELERY_NET_MONITOR_INFO_SHOW.format(network=net)
     stat_net = []
-    stat_net.extend(nstat_net)
-    stat_net.extend(bstat_net)
     stat_net.extend(bbstat_net)
+    stat_net.extend(bstat_net)
+    stat_net.extend(nstat_net)
     categories = []
     datasets = defaultdict(list)
     for x in stat_net:
