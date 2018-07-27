@@ -154,7 +154,7 @@ def _get_tcp_connect_info(redis, key, bn="now"):
     #     index +=1
     datasets = d["datasets"]
     yaxisminValue = d["yaxisminValue"]
-    yaxismaxValue = d["yaxismaxValue"] + 10
+    yaxismaxValue = get_tcp_yaxismaxValue(d["yaxismaxValue"])
     category = "|".join(categories)
     dataset = []
     for status in ("CLOSED", "CLOSE_WAIT", "CLOSING", "ESTABLISHED", "FIN_WAIT1", "FIN_WAIT2", "LAST_ACK", "LISTEN", "SYN_RECV", "SYN_SENT", "TIME_WAIT"):
@@ -219,6 +219,7 @@ def _get_tcp_connect_info(redis, key, bn="now"):
                 # "numVDivLines": "12", # 垂直分割线
                 # "numberSuffix": " KB/s",# 增加数字后缀
                 # "numberPrefix": "KB/S", # 增加数字前缀     % 为 '%25'
+                "numDivLines": 5,  # 水平分割线
             },
             "categories": [{
                 "category":  "{}".format(category)
@@ -342,7 +343,7 @@ def _get_network_monitor_info(redis, net, now_fmt, bnow_fmt, bbnow_fmt):
             _unit, _unit_str, _unit_round  = MB, 'MB/s', 2
         yaxisminValue = 0
         yaxismaxValue = network.trans_io(d["yaxismaxValue"], _unit, _unit_round)
-        yaxismaxValue = get_yaxismaxValue(yaxismaxValue, _unit)
+        yaxismaxValue = get_net_yaxismaxValue(yaxismaxValue, _unit)
         category = "|".join(categories)
         _in_key = 'Incoming network traffic on {}'.format(net)
         _out_key = 'Outgoing network traffic on {}'.format(net)
@@ -419,8 +420,21 @@ def _get_network_monitor_info(redis, net, now_fmt, bnow_fmt, bbnow_fmt):
         datajs.append((daykey, day, json.dumps(js)))
     return datajs
 
+def get_tcp_yaxismaxValue(yaxismaxValue):
+    if yaxismaxValue>200:
+        d = 150
+        while 1:
+            if d >= yaxismaxValue:
+                return d
+            d += 30
+    else:
+        d = 60
+        while 1:
+            if d >= yaxismaxValue:
+                return d
+            d += 30
 
-def get_yaxismaxValue(yaxismaxValue, unit):
+def get_net_yaxismaxValue(yaxismaxValue, unit):
     if unit == MB:
         d = 1.2
         while 1:
