@@ -267,6 +267,7 @@ def set_network_monitor_info(redis, nstat_net, net, now_fmt, bnow_fmt, bbnow_fmt
     # stat_net.extend(bstat_net)
     # stat_net.extend(nstat_net)
     for key, stats in [(skey, nstat_net),(bskey, bstat_net),(bbskey, bbstat_net)]:
+        if not stats: continue
         categories = []
         datasets = defaultdict(list)
         for x in stats:
