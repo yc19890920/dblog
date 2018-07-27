@@ -30,7 +30,7 @@ labelStep = 12
 
 # ---------------------------
 # TCP 连接情况
-@shared_task(bind=False)
+@shared_task(bind=False, ignore_result=True, store_errors_even_if_ignored=True)
 def tcp_connect_info():
     """  统计 TCP连接情况
     netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
@@ -230,7 +230,7 @@ def _get_tcp_connect_info(redis, key, bn="now"):
 
 # ---------------------------
 # 监控网卡流量
-@shared_task(bind=False)
+@shared_task(bind=False, ignore_result=True, store_errors_even_if_ignored=True)
 def network_monitor_info():
     key_info, net_in, net_out = network.get_nets_io_rate(network.get_nets_io)
     # time_fmt = time.strftime("%Y-%m-%d %H:%M")
