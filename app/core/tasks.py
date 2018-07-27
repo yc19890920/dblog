@@ -428,8 +428,11 @@ def get_yaxismaxValue(yaxismaxValue, unit):
                 return d
             d += 0.3
     else:
-        d = 30
+        if yaxismaxValue>=30:
+            d = u = 30
+        else:
+            d = u = 3
         while 1:
             if d >= yaxismaxValue:
                 return d
-            d += 30
+            d += u
