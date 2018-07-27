@@ -67,19 +67,33 @@
             </div>
             <!-- /section:custom/widget-box.options -->
             <div class="widget-body">
-                <div class="widget-main no-padding" style="min-height: 500px;">
-                    {% for k, v in network_monitor_infos %}
-                    <div id="tcp-info-container-{{ k }}" style="margin:0 auto;" {% if forloop.first %}{% else %}class="display-none"{% endif %}></div>
+                <div class="widget-main no-padding" style="min-height: 535px;">
+                    {% for key, datas in network_monitor_infos %}
+                    <div id="net-info-container-{{ key }}" style="margin:0 auto;" {% if forloop.first %}{% else %}class="display-none"{% endif %}>
+                        <div class="pull-right" style="margin-top: 10px;margin-right: 13px;">
+                            {% for daykey, day, v in datas %}
+                            <label class="radio-inline">
+                                <input class="radioItemnet{{ key }}" {% if daykey == 'today' %}checked=""{% endif %} value="{{ daykey }}" id="optionsRadiosNetworkDay{{ key }}" name="optionsRadiosNetworkDay{{ key }}" type="radio" autocomplete="off">{{ day }}
+                            </label>
+                            {% endfor %}
+                        </div>
+
+                        {% for daykey, day, v in datas %}
+                        <div id="net-info-container-{{ key }}-{{ daykey }}" style="margin:0 auto;"  {% if daykey == 'today' %}{% else %}class="display-none"{% endif %}></div>
+                    {% if v %}
                     <script type="text/javascript">
                         FusionCharts.ready(function () {
                             new FusionCharts({{ v|safe }}).render();
                         });
                     </script>
+                    {% endif %}
                     {% endfor %}
-                </div><!-- /.widget-main -->
-            </div>
+                </div>
+                {% endfor %}
+            </div><!-- /.widget-main -->
         </div>
-    </div><!-- /.span -->
+    </div>
+</div><!-- /.span -->
 </div><!-- /.row -->
 {% endif %}
 
@@ -90,7 +104,7 @@
         <div class="widget-box " id="widget-box-3">
             <div class="widget-header">
                 <h5 class="widget-title bigger lighter">
-                     TCP连接情况
+                    TCP连接情况
                 </h5>
                 {%  if bntcp_info_json %}
                 <div class="pull-right" style="margin-top: 10px;margin-right: 13px;">
@@ -150,16 +164,31 @@
         });
 
         var network_monitor_keys = {{ network_monitor_keys|safe }};
+        // alert(network_monitor_keys[1]);
         $(".radioItemnet").change( function() {
             var selectedvalue = $("input[name='optionsRadiosNetwork']:checked").val();
-            $("#tcp-info-container-"+selectedvalue).removeClass("display-none");
+            $("#net-info-container-"+selectedvalue).removeClass("display-none");
             for (var i = 0, j = network_monitor_keys.length; i < j; i++){
                 var network = $.trim(network_monitor_keys[i]);
                 if ( network != selectedvalue ) {
-                    $("#tcp-info-container-"+network).addClass("display-none");
+                    $("#net-info-container-"+network).addClass("display-none");
                 }
             }
         });
+
+        {% for key in network_monitor_keys %}
+        var days = new Array('today', 'yest', 'bday');
+        $(".radioItemnet{{ key }}").change( function() {
+            var selectedvalue = $("input[name='optionsRadiosNetworkDay{{ key }}']:checked").val();
+            $("#net-info-container-{{ key }}-"+selectedvalue).removeClass("display-none");
+            for (var i = 0, j = days.length; i < j; i++){
+                var day = $.trim(days[i]);
+                if ( day != selectedvalue ) {
+                    $("#net-info-container-{{ key }}-"+day).addClass("display-none");
+                }
+            }
+        });
+        {% endfor %}
     });
 </script>
 {% endblock %}
