@@ -26,7 +26,7 @@ GB = 1 << 30
 TB = 1 << 40
 PB = 1 << 50
 EXPIRE_TIME = 3600*24*5
-labelStep = 12
+labelStep = 60
 
 # ---------------------------
 # TCP 连接情况
