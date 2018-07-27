@@ -278,6 +278,7 @@ def set_network_monitor_info(redis, nstat_net, net, now_fmt, bnow_fmt, bbnow_fmt
             datasets['Incoming network traffic on {}'.format(net)].append(x1)
             datasets['Outgoing network traffic on {}'.format(net)].append(x2)
         datasets = dict(datasets)
+        if not datasets: continue
         datasets_lists = []
         for k, v in datasets.iteritems():
             datasets_lists.extend(v)
