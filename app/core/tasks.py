@@ -144,21 +144,21 @@ def _get_tcp_connect_info(redis, key, bn="now"):
     if not j: return None
     d = json.loads(j)
     categories = d["categories"]
-    length = len(categories)
-    index = 0
-    while 1:
-        if index>=length:break
-        _c = categories[index]
-        if _c.endswith(":00"):
-            break
-        index +=1
+    # length = len(categories)
+    # index = 0
+    # while 1:
+    #     if index>=length:break
+    #     _c = categories[index]
+    #     if _c.endswith(":00"):
+    #         break
+    #     index +=1
     datasets = d["datasets"]
     yaxisminValue = d["yaxisminValue"]
     yaxismaxValue = d["yaxismaxValue"] + 10
-    category = "|".join(categories[index:])
+    category = "|".join(categories)
     dataset = []
     for status in ("CLOSED", "CLOSE_WAIT", "CLOSING", "ESTABLISHED", "FIN_WAIT1", "FIN_WAIT2", "LAST_ACK", "LISTEN", "SYN_RECV", "SYN_SENT", "TIME_WAIT"):
-        data = datasets[status][index:]
+        data = datasets[status]
         dataset.append({
             "seriesname": status,
             "data": "|".join(map(str, data))
@@ -327,14 +327,14 @@ def _get_network_monitor_info(redis, net, now_fmt, bnow_fmt, bbnow_fmt):
             continue
         d = json.loads(j)
         categories = d["categories"]
-        length = len(categories)
-        index = 0
-        while 1:
-            if index>=length:break
-            _c = categories[index]
-            if _c.endswith(":00"):
-                break
-            index +=1
+        # length = len(categories)
+        # index = 0
+        # while 1:
+        #     if index>=length:break
+        #     _c = categories[index]
+        #     if _c.endswith(":00"):
+        #         break
+        #     index +=1
         datasets = d["datasets"]
         yaxismaxValue = d["yaxismaxValue"]
         _unit, _unit_str, _unit_round = KB, 'KB/s', 1
@@ -343,11 +343,11 @@ def _get_network_monitor_info(redis, net, now_fmt, bnow_fmt, bbnow_fmt):
         yaxisminValue = 0
         yaxismaxValue = network.trans_io(d["yaxismaxValue"], _unit, _unit_round)
         yaxismaxValue = get_yaxismaxValue(yaxismaxValue, _unit)
-        category = "|".join(categories[index:])
+        category = "|".join(categories)
         _in_key = 'Incoming network traffic on {}'.format(net)
         _out_key = 'Outgoing network traffic on {}'.format(net)
-        _ins = [network.trans_io(i, _unit, _unit_round) for i in datasets[_in_key][index:]]
-        _outs = [network.trans_io(i, _unit, _unit_round) for i in datasets[_out_key][index:]]
+        _ins = [network.trans_io(i, _unit, _unit_round) for i in datasets[_in_key]]
+        _outs = [network.trans_io(i, _unit, _unit_round) for i in datasets[_out_key]]
         dataset = [{
             "seriesname": _in_key,
             "data": "|".join(map(str, _ins))
