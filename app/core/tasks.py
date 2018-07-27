@@ -14,11 +14,11 @@ from collections import defaultdict, OrderedDict
 from app.utils import network
 from django.utils.translation import ugettext_lazy as _
 
-DJANGO_CELERY_TCP_CONNECT_INFO = "linux-operation-celery-tcp-connect-info-{time}"
-DJANGO_CELERY_TCP_CONNECT_INFO_SHOW = "linux-operation-celery-tcp-connect-info-show-{time}"
+DJANGO_CELERY_TCP_CONNECT_INFO = "dblog-celery-tcp-connect-info-{time}"
+DJANGO_CELERY_TCP_CONNECT_INFO_SHOW = "dblog-celery-tcp-connect-info-show-{time}"
 
-DJANGO_CELERY_NET_MONITOR_INFO = "linux-operation-celery-net-monitor-info-{network}-{time}"
-DJANGO_CELERY_NET_MONITOR_INFO_SHOW = "linux-operation-celery-net-monitor-info-show-{network}-{time}"
+DJANGO_CELERY_NET_MONITOR_INFO = "dblog-celery-net-monitor-info-{network}-{time}"
+DJANGO_CELERY_NET_MONITOR_INFO_SHOW = "dblog-celery-net-monitor-info-show-{network}-{time}"
 
 KB = 1 << 10
 MB = 1 << 20
