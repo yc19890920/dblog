@@ -11,7 +11,7 @@ import datetime
 import netifaces
 from django_redis import get_redis_connection
 from collections import defaultdict, OrderedDict
-from app.utils.sys import network
+from app.utils import network
 from django.utils.translation import ugettext_lazy as _
 
 DJANGO_CELERY_TCP_CONNECT_INFO = "linux-operation-celery-tcp-connect-info-{time}"
