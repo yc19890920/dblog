@@ -21,6 +21,16 @@
 
     <!-- googleapis-ajax-libs-jquery-2.2.4-jquery.min.js  debug_toolbar 使用-->
     <link rel="stylesheet" href="{% static 'debug_toolbar/googleapis-ajax-libs-jquery-2.2.4-jquery.min.js' %}">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?86f05c8f06bfece7e8cfeacb93315f09";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
 
     {% block head_css %}{% endblock %}
     {% block head_js %}{% endblock %}
