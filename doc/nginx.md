@@ -1,3 +1,6 @@
+sudo yum install -y nginx
+systemctl start nginx.service
+
 ## nginx  配置
 - cd /etc/nginx/conf.d
 
