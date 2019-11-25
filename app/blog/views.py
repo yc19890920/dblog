@@ -13,10 +13,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template.response import TemplateResponse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
-from django.db.models import query
+from django.db.models import query, Q
 from django.conf import settings
 from django.utils.encoding import smart_str
-from app.blog.models import Tag, Category, Article, BlogComment, Suggest, CKeditorPictureFile
+from app.blog.models import Tag, Category, Article, BlogComment, Suggest, CKeditorPictureFile, ArticleTags
 from app.blog.forms import ArticleForm, TagForm, CategoryForm, ShowForm, AdminLogForm
 from django.utils.translation import ugettext_lazy as _
 from auditlog.models import LogEntry
@@ -48,7 +48,7 @@ def admin_log_ajax(request):
             logs = logs.filter(content_type_id=content_type_id)
         except BaseException as e:
             logs = logs.filter(extend_type=content_type)
-
+    
     if start_time:
         logs = logs.filter(timestamp__gte=start_time)
     if end_time:
@@ -56,7 +56,7 @@ def admin_log_ajax(request):
     if search:
         logs = logs.filter(remote_addr__icontains=search)
         # Q(remote_addr__icontains=search) | Q(changes__icontains=search) )
-
+    
     colums = ['id', 'content_type', 'changes', 'action', 'actor', 'remote_addr', 'timestamp']
     if logs.exists() and order_column and int(order_column) < len(colums):
         col_name = colums[int(order_column)]
@@ -64,26 +64,26 @@ def admin_log_ajax(request):
             logs = logs.order_by('-%s' % col_name)
         else:
             logs = logs.order_by('%s' % col_name)
-
+    
     try:
         length = int(data.get('length', 1))
     except ValueError:
         length = 1
-
+    
     try:
         page = int(data.get('start', '0')) / length + 1
     except ValueError:
         page = 1
-
+    
     count = len(logs)
-
+    
     paginator = Paginator(logs, length)
-
+    
     try:
         logs = paginator.page(page)
     except (EmptyPage, InvalidPage):
         logs = paginator.page(paginator.num_pages)
-
+    
     rs = {"sEcho": 0, "iTotalRecords": count, "iTotalDisplayRecords": count, "aaData": []}
     re_str = '<td.*?>(.*?)</td>'
     for d in logs.object_list:
@@ -153,7 +153,7 @@ def ajax_lists(request, model):
     lists = model.objects.all()
     if search:
         lists = lists.filter(name__icontains=search)
-
+    
     # if order_column and int(order_column) < len(colums):
     # if isinstance(query, query.QuerySet) and order_column and int(order_column) < len(colums):
     if order_column and int(order_column) < len(colums):
@@ -161,19 +161,19 @@ def ajax_lists(request, model):
             lists = lists.order_by('-%s' % colums[int(order_column)])
         else:
             lists = lists.order_by('%s' % colums[int(order_column)])
-
+    
     try:
         length = int(data.get('length', 1))
     except ValueError:
         length = 1
-
+    
     try:
         start_num = int(data.get('start', '0'))
         page = start_num / length + 1
     except ValueError:
         start_num = 0
         page = 1
-
+    
     count = lists.count()
     if start_num >= count:
         page = 1
@@ -215,26 +215,31 @@ def ajax_article(request):
     colums = ['id', 'title', 'status', 'auth', 'source', 'views', 'likes', 'topped', 'created', 'updated', 'category']
     lists = Article.objects.all()
     if search:
-        lists = lists.filter(title__icontains=search)
-
+        article_ids = list(ArticleTags.objects.filter(tag__name__icontains=search).values_list("article_id", flat=True))
+        lists = lists.filter(
+            Q(title__icontains=search) |
+            Q(category__name__icontains=search) |
+            Q( id__in=article_ids )
+        )
+    
     if order_column and int(order_column) < len(colums):
         if order_dir == 'desc':
             lists = lists.order_by('-%s' % colums[int(order_column)])
         else:
             lists = lists.order_by('%s' % colums[int(order_column)])
-
+    
     try:
         length = int(data.get('length', 1))
     except ValueError:
         length = 1
-
+    
     try:
         start_num = int(data.get('start', '0'))
         page = start_num / length + 1
     except ValueError:
         start_num = 0
         page = 1
-
+    
     count = lists.count()
     if start_num >= count:
         page = 1
@@ -324,7 +329,7 @@ def picture(request):
                 obj.delete()
             messages.add_message(request, messages.SUCCESS, u'删除成功')
         return HttpResponseRedirect(reverse("admin_picture"))
-
+    
     return render(request, template_name="blog/picture.html", context={
     })
 
@@ -338,25 +343,25 @@ def ajax_picture(request):
     lists = CKeditorPictureFile.objects.all()
     if search:
         lists = lists.filter(filename__icontains=search)
-
+    
     if order_column and int(order_column) < len(colums):
         if order_dir == 'desc':
             lists = lists.order_by('-%s' % colums[int(order_column)])
         else:
             lists = lists.order_by('%s' % colums[int(order_column)])
-
+    
     try:
         length = int(data.get('length', 1))
     except ValueError:
         length = 1
-
+    
     try:
         start_num = int(data.get('start', '0'))
         page = start_num / length + 1
     except ValueError:
         start_num = 0
         page = 1
-
+    
     count = lists.count()
     if start_num >= count:
         page = 1
@@ -399,25 +404,25 @@ def ajax_comment(request):
     lists = BlogComment.objects.all()
     if search:
         lists = lists.filter(content__icontains=search)
-
+    
     if order_column and int(order_column) < len(colums):
         if order_dir == 'desc':
             lists = lists.order_by('-%s' % colums[int(order_column)])
         else:
             lists = lists.order_by('%s' % colums[int(order_column)])
-
+    
     try:
         length = int(data.get('length', 1))
     except ValueError:
         length = 1
-
+    
     try:
         start_num = int(data.get('start', '0'))
         page = start_num / length + 1
     except ValueError:
         start_num = 0
         page = 1
-
+    
     count = lists.count()
     if start_num >= count:
         page = 1
@@ -460,25 +465,25 @@ def ajax_suggest(request):
     lists = Suggest.objects.all()
     if search:
         lists = lists.filter(suggest__icontains=search)
-
+    
     if order_column and int(order_column) < len(colums):
         if order_dir == 'desc':
             lists = lists.order_by('-%s' % colums[int(order_column)])
         else:
             lists = lists.order_by('%s' % colums[int(order_column)])
-
+    
     try:
         length = int(data.get('length', 1))
     except ValueError:
         length = 1
-
+    
     try:
         start_num = int(data.get('start', '0'))
         page = start_num / length + 1
     except ValueError:
         start_num = 0
         page = 1
-
+    
     count = lists.count()
     if start_num >= count:
         page = 1
