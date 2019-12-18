@@ -6,3 +6,7 @@
 
 /home/ubuntu/pyenv/versions/django-blog/bin/python /home/ubuntu/git/dblog/manage.py runserver 0.0.0.0:8080
 
+
+
+
+supervisord -c /home/microk8s/supervisor.conf
